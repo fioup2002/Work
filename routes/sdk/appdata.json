@@ -1,0 +1,16 @@
+{
+  "alarm": {
+    "duration": 0,
+    "enabled": 0,
+    "siren_type": 1,
+    "trigger_duration": 0
+  },
+  "cameras": [],
+  "eventFilter": [],
+  "macros": [],
+  "registeredDevices": [],
+  "rooms": [],
+  "scenes": [],
+  "schedules": [],
+  "targetNames": {}
+}
