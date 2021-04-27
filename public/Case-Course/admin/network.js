@@ -16,7 +16,7 @@ function GetAllActivity() {
   $.ajax({
     url: "/event/list",
     dataType: "json",
-    type: "post",
+    type: "get",
     data: "",
     success: function (res) {
       gActivityList = res.eventList;
@@ -24,17 +24,23 @@ function GetAllActivity() {
     },
   });
 }
-function GetActivityDetail(){
-	$.ajax({
-    url: "/event/list",
-    dataType: "json",
-    type: "post",
-    data: "",
-    success: function (res) {
-      gActivityList = res.eventList;
-      UpdateActivity();
-    },
-  });
+function GetActivityDetail(index){
+  if(index == -1){
+
+  }
+  else{
+    $.ajax({
+      url: "/api/event/index.php/event/"+gActivityList[index].event_id+"/content/",
+      dataType: "json",
+      type: "get",
+      data: "",
+      success: function (res) {
+        console.log(res);
+        // gActivityList = res.eventList;
+        // UpdateActivity();
+      },
+    });
+  }
 }
 function GetAllRealClass() {
   var a = gServerAPI + "/course/index.php/course/list";

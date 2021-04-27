@@ -1,9 +1,55 @@
-.activity_block{
-  width: calc((100% - 10px * 5) / 4);
-  height: 50px;
-  border: 1px solid #DDD;
-  box-sizing: border-box;
-  margin-left: 10px;
-  margin-top: 10px;
-  float: left;
+.activity {
+  &_block {
+    width: calc((100% - 10px * 5) / 4);
+    height: 50px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    margin-left: 10px;
+    margin-top: 10px;
+    float: left;
+  }
+  &_detail {
+    width: calc(100% - 10px * 2);
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    margin-left: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    float: left;
+    &_line {
+      width: calc(100% - 10px * 2);
+      height: 50px;
+      margin-left: 10px;
+      margin-top: 10px;
+      &_label{
+        width: 100px;
+        height: 100%;
+        float: left;
+      }
+      &_input{
+        width: calc(100% - 100px - 10px);
+        height: 100%;
+        margin-left: 10px;
+        float: left;
+        font-size: 20px;
+      }
+      &_img{
+        width: 280px;
+        height: 100%;
+        float: left;
+        margin-left: 10px;
+      }
+      &_upload{
+        width: auto;
+        height: auto;
+        margin-left: 10px;
+        float: left;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+      }
+      &:nth-of-type(7){
+        height: 210px;
+      }
+    }
+  }
 }

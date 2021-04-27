@@ -1061,7 +1061,7 @@ function UpdateUserInfo(e, t) {
 }
 function ChangeContent(e) {
   if (PAGE_MENUS[e] == "外拍活動管理") {
-		GetAllActivity();
+    GetAllActivity();
     gPageIndex = e;
     $("#header_id").html(PAGE_MENUS[e]);
     $("#content_body").empty();
@@ -1126,12 +1126,23 @@ function ReadURL(e, a, i) {
     (t.onload = function (e) {
       if (null == i) {
         var t = "";
-        (t += "<img class='fill_parent' src='" + e.target.result + "'>"),
+        t += "<img class='fill_parent' src='" + e.target.result + "'>";
+        if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
+          $("#activity_detail_mainImg_" + a).attr("src", e.target.result);
+          ConfirmActivityImage();
+        } else {
           $("#class_" + a + "_add_image")
             .empty()
-            .append(t),
+            .append(t);
           ConfirmAddImage(a);
-      } else $("#class_" + a + "_image_" + i).attr("src", e.target.result), ConfirmChangeImage(a, i);
+        }
+      } else {
+        if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
+          $("#activity_detail_mainImg_" + a).attr("src", e.target.result);
+        } else {
+          $("#class_" + a + "_image_" + i).attr("src", e.target.result), ConfirmChangeImage(a, i);
+        }
+      }
     }),
       t.readAsDataURL(e.files[0]);
   }
@@ -1315,6 +1326,9 @@ function ConfirmChangeImage(e, t) {
   var a = $("#class_" + e + "_" + t + "_image_file")[0].files[0];
   null != a ? UploadImage("thumb", a, e) : alert("請上傳照片");
 }
+function ConfirmActivityImage(){
+  
+}
 function ConfirmAddSpec(e) {
   var t = 86400 * $("#class_" + e + "_add_day").val(),
     a = $("#class_" + e + "_add_price").val();
@@ -1469,25 +1483,74 @@ function ConfirmDeleteAttatch(e, t) {
   var i = GetClassFromID(e);
   UpdateAttach(i), UpdateBelongChapter(i);
 }
-function UpdateActivity(){
-  console.log(gActivityList);
+function UpdateActivity() {
   $("#content_body").empty();
   var res = "";
-  for(var i = 0; i < gActivityList.length;i++){
-    if ( i == 0){
-      res += GenerateActivityBlock(-1,"+");
+  for (var i = 0; i < gActivityList.length; i++) {
+    if (i == 0) {
+      res += GenerateActivityBlock(-1, "+");
+      res += GenerateActivityDetail(-1);
     }
-    res += GenerateActivityBlock(i,gActivityList[i].name);
+    res += GenerateActivityBlock(i, gActivityList[i].name);
+    res += GenerateActivityDetail(i);
   }
   $("#content_body").append(res);
 }
-function GenerateActivityBlock(index , text){
+function GenerateActivityBlock(index, text) {
   var res = "";
-  res += "<div class='activity_block' onclick='GetActivityDetail("+index+")'>";
-  res += GenerateNormalString(text,"font-size: 20px")
+  res += "<div class='activity_block' onclick='GetActivityDetail(" + index + ")'>";
+  res += GenerateNormalString(text, "font-size: 20px");
   res += "</div>";
   return res;
 }
-function GenerateActivityDetail(index){
-
+function GenerateActivityDetail(index) {
+  var res = "";
+  res += "<div class='activity_detail' id='activity_detail_" + index + "'>";
+  res += "<div class='activity_detail_line'>";
+  res += "<div class='activity_detail_line_label'>";
+  res += GenerateNormalString("名字:", "font-size: 20px;");
+  res += "</div>";
+  res += "<input type='text' id='activity_detail_name_" + index + "' class='activity_detail_line_input'></input>";
+  res += "</div>";
+  res += "<div class='activity_detail_line'>";
+  res += "<div class='activity_detail_line_label'>";
+  res += GenerateNormalString("描述:", "font-size: 20px;");
+  res += "</div>";
+  res += "<input type='text' id='activity_detail_description_" + index + "' class='activity_detail_line_input'></input>";
+  res += "</div>";
+  res += "<div class='activity_detail_line'>";
+  res += "<div class='activity_detail_line_label'>";
+  res += GenerateNormalString("開始時間:", "font-size: 20px;");
+  res += "</div>";
+  res += "<input type='date' id='activity_detail_startTime_" + index + "' class='activity_detail_line_input'></input>";
+  res += "</div>";
+  res += "<div class='activity_detail_line'>";
+  res += "<div class='activity_detail_line_label'>";
+  res += GenerateNormalString("結束時間:", "font-size: 20px;");
+  res += "</div>";
+  res += "<input type='date' id='activity_detail_endTime_" + index + "' class='activity_detail_line_input'></input>";
+  res += "</div>";
+  res += "<div class='activity_detail_line'>";
+  res += "<div class='activity_detail_line_label'>";
+  res += GenerateNormalString("啟動:", "font-size: 20px;");
+  res += "</div>";
+  res += "<input type='checkbox' id='activity_detail_active_" + index + "' class='activity_detail_line_input' style='width: 50px;margin-left:10px'></input>";
+  res += "</div>";
+  res += "<div class='activity_detail_line'>";
+  res += "<div class='activity_detail_line_label'>";
+  res += GenerateNormalString("連結:", "font-size: 20px;");
+  res += "</div>";
+  res += "<input type='text' id='activity_detail_link_" + index + "' class='activity_detail_line_input'></input>";
+  res += "</div>";
+  res += "<div class='activity_detail_line'>";
+  res += "<div class='activity_detail_line_label'>";
+  res += GenerateNormalString("主圖:", "font-size: 20px;");
+  res += "</div>";
+  res += "<label class='activity_detail_line_img'>";
+  res += "<img id='activity_detail_mainImg_" + index + "' class='fill_parent'></img>";
+  res += "<input id='activity_detail_mainImg_file_" + index + "' style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\" ,\"mainImg\")' accept='image/*'>";
+  res += "</label>";
+  res += "</div>";
+  res += "</div>";
+  return res;
 }
