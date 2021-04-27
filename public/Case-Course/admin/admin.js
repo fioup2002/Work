@@ -1129,7 +1129,7 @@ function ReadURL(e, a, i) {
         t += "<img class='fill_parent' src='" + e.target.result + "'>";
         if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
           $("#activity_detail_mainImg_" + a).attr("src", e.target.result);
-          ConfirmActivityImage();
+          ConfirmActivityImage("activity_detail_mainImg_file_" + a, a);
         } else {
           $("#class_" + a + "_add_image")
             .empty()
@@ -1326,8 +1326,13 @@ function ConfirmChangeImage(e, t) {
   var a = $("#class_" + e + "_" + t + "_image_file")[0].files[0];
   null != a ? UploadImage("thumb", a, e) : alert("請上傳照片");
 }
-function ConfirmActivityImage(){
-  
+function ConfirmActivityImage(id, index) {
+  var file = $("#" + id)[0].files[0];
+  if (file != null) {
+    UploadImage("thumb", file, index);
+  } else {
+    alert("請上傳照片");
+  }
 }
 function ConfirmAddSpec(e) {
   var t = 86400 * $("#class_" + e + "_add_day").val(),
@@ -1487,10 +1492,6 @@ function UpdateActivity() {
   $("#content_body").empty();
   var res = "";
   for (var i = 0; i < gActivityList.length; i++) {
-    if (i == 0) {
-      res += GenerateActivityBlock(-1, "+");
-      res += GenerateActivityDetail(-1);
-    }
     res += GenerateActivityBlock(i, gActivityList[i].name);
     res += GenerateActivityDetail(i);
   }
@@ -1546,10 +1547,30 @@ function GenerateActivityDetail(index) {
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("主圖:", "font-size: 20px;");
   res += "</div>";
+  res += "<div class='activity_detail_line_img_block'>";
   res += "<label class='activity_detail_line_img'>";
   res += "<img id='activity_detail_mainImg_" + index + "' class='fill_parent'></img>";
-  res += "<input id='activity_detail_mainImg_file_" + index + "' style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\" ,\"mainImg\")' accept='image/*'>";
+  res += "<input id='activity_detail_mainImg_file_" + index + "' style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\")' accept='image/*'>";
   res += "</label>";
+  res += "</div>";
+  res += "</div>";
+  res += "<div class='activity_detail_line'>";
+  res += "<div class='activity_detail_line_label'>";
+  res += GenerateNormalString("子圖:", "font-size: 20px;");
+  res += "</div>";
+  res += "<div class='activity_detail_line_img_block'>";
+  
+  res += "<div class='activity_detail_line_img_block_button'>";
+
+  res += "<label class='activity_detail_line_img_block_button_img'>";
+  res += "<img class='fill_parent'></img>";
+  res += "<input style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\")' accept='image/*'>";
+  res += "</label>";
+  
+  res += "</div>";
+
+  res += "</div>";
+  
   res += "</div>";
   res += "</div>";
   return res;

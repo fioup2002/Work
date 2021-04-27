@@ -20,22 +20,36 @@ function GetAllActivity() {
     data: "",
     success: function (res) {
       gActivityList = res.eventList;
+      var obj = new Object();
+      obj["event_id"] = -1;
+      obj["name"] = "+";
+      gActivityList.splice(0, 0, obj);
       UpdateActivity();
     },
   });
 }
-function GetActivityDetail(index){
-  if(index == -1){
-
-  }
-  else{
+function GetActivityDetail(index) {
+  if (index == -1) {
+    var eventData = new Object();
+    eventData.name = "";
+    eventData.description = "";
+    eventData.isActive = "1";
+    eventData.startTime = "";
+    eventData.endTime = "";
+    var data = new Object();
+    data.link = "";
+    data.mainImg = "";
+    data.imgs = new Array();
+    eventData.data = data;
+    gActivityList[index].content = eventData;
+  } else {
     $.ajax({
-      url: "/api/event/index.php/event/"+gActivityList[index].event_id+"/content/",
+      url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content/",
       dataType: "json",
       type: "get",
       data: "",
       success: function (res) {
-        console.log(res);
+        gActivityList[index].content = res;
         // gActivityList = res.eventList;
         // UpdateActivity();
       },
@@ -304,17 +318,21 @@ function UploadImage(e, s, o) {
           t = s.responseText;
         }
         if ((CheckStatus(t, c), "success" == t.status)) {
-          for (var e = 0; e < gAllModifyClasses.length; e++)
-            if (gAllModifyClasses[e].id == o) {
-              var a = !1;
-              null == gAllModifyClasses[e].pics && (gAllModifyClasses[e].pics = new Array());
-              for (var r = 0; r < gAllModifyClasses[e].pics.length; r++) gAllModifyClasses[e].pics[r].name == t.name && ((gAllModifyClasses[e].pics[r].path = t.path), (a = !0));
-              if (!a) {
-                var n = new Object();
-                (n.name = t.name), (n.path = t.path), gAllModifyClasses[e].pics.push(n);
+          if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
+            
+          } else {
+            for (var e = 0; e < gAllModifyClasses.length; e++)
+              if (gAllModifyClasses[e].id == o) {
+                var a = !1;
+                null == gAllModifyClasses[e].pics && (gAllModifyClasses[e].pics = new Array());
+                for (var r = 0; r < gAllModifyClasses[e].pics.length; r++) gAllModifyClasses[e].pics[r].name == t.name && ((gAllModifyClasses[e].pics[r].path = t.path), (a = !0));
+                if (!a) {
+                  var n = new Object();
+                  (n.name = t.name), (n.path = t.path), gAllModifyClasses[e].pics.push(n);
+                }
               }
-            }
-          UpdateImage(o);
+            UpdateImage(o);
+          }
         } else alert("上傳圖片失敗");
       },
       contentType: !1,
