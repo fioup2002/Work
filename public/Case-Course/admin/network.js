@@ -42,7 +42,8 @@ function GetActivityDetail(index) {
     data.imgs = new Array();
     eventData.data = data;
     gActivityList[index].content = eventData;
-    $("#content_body").append(GenerateActivityDetail(index));
+    $("#activity_detail_"+index).remove();
+    $("#content_body #activity_block_" + index).after(GenerateActivityDetail(index));
   } else {
     $.ajax({
       url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content/",
