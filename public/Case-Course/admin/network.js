@@ -29,7 +29,7 @@ function GetAllActivity() {
   });
 }
 function GetActivityDetail(index) {
-  if (index == -1) {
+  if (index == 0) {
     var eventData = new Object();
     eventData.name = "";
     eventData.description = "";
@@ -42,6 +42,7 @@ function GetActivityDetail(index) {
     data.imgs = new Array();
     eventData.data = data;
     gActivityList[index].content = eventData;
+    $("#content_body").append(GenerateActivityDetail(index));
   } else {
     $.ajax({
       url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content/",
@@ -319,7 +320,6 @@ function UploadImage(e, s, o) {
         }
         if ((CheckStatus(t, c), "success" == t.status)) {
           if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
-            
           } else {
             for (var e = 0; e < gAllModifyClasses.length; e++)
               if (gAllModifyClasses[e].id == o) {

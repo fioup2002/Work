@@ -1493,13 +1493,12 @@ function UpdateActivity() {
   var res = "";
   for (var i = 0; i < gActivityList.length; i++) {
     res += GenerateActivityBlock(i, gActivityList[i].name);
-    res += GenerateActivityDetail(i);
   }
   $("#content_body").append(res);
 }
 function GenerateActivityBlock(index, text) {
   var res = "";
-  res += "<div class='activity_block' onclick='GetActivityDetail(" + index + ")'>";
+  res += "<div id='activity_block_"+index+"' class='activity_block' onclick='GetActivityDetail(" + index + ")'>";
   res += GenerateNormalString(text, "font-size: 20px");
   res += "</div>";
   return res;
@@ -1558,19 +1557,34 @@ function GenerateActivityDetail(index) {
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("子圖:", "font-size: 20px;");
   res += "</div>";
-  res += "<div class='activity_detail_line_img_block'>";
-  
-  res += "<div class='activity_detail_line_img_block_button'>";
-
-  res += "<label class='activity_detail_line_img_block_button_img'>";
-  res += "<img class='fill_parent'></img>";
-  res += "<input style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\")' accept='image/*'>";
-  res += "</label>";
-  
-  res += "</div>";
-
-  res += "</div>";
-  
+  console.log(gActivityList[index].content);
+  for (var i = 0; i < gActivityList[index].content.data.imgs.length; i++) {
+    res += "<div class='activity_detail_line_img_block'>";
+    res += "<div class='activity_detail_line_img_block_button'>";
+    res += "<label class='activity_detail_line_img_block_button_top'>";
+    res += "<img class='fill_parent'></img>";
+    res += "<input style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\")' accept='image/*'>";
+    res += "</label>";
+    res += "<div class='activity_detail_line_img_block_button_bottom'>";
+    if (i == 0) {
+      res += "<div class='activity_detail_line_img_block_button_bottom_block'>";
+      res += GenerateNormalString("新增", "font-size: 20px;");
+      res += "</div>";
+    } else {
+      res += "<div class='activity_detail_line_img_block_button_bottom_block'>";
+      res += GenerateNormalString("往前", "font-size: 20px;");
+      res += "</div>";
+      res += "<div class='activity_detail_line_img_block_button_bottom_block'>";
+      res += GenerateNormalString("往後", "font-size: 20px;");
+      res += "</div>";
+      res += "<div class='activity_detail_line_img_block_button_bottom_block'>";
+      res += GenerateNormalString("刪除", "font-size: 20px;");
+      res += "</div>";
+    }
+    res += "</div>";
+    res += "</div>";
+    res += "</div>";
+  }
   res += "</div>";
   res += "</div>";
   return res;

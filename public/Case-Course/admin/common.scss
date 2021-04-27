@@ -47,13 +47,26 @@
       }
       &_img_block_button{
         width: 280px;
-        height: 240px;
         float: left;
         margin-left: 10px;
-        &_img{
+        &_top{
           width: 280px;
           height: 210px;
-          background: #F00;
+          display: block;
+        }
+        &_bottom{
+          width: 280px;
+          overflow: hidden;
+          border-left: 1px solid #ddd;
+          border-bottom: 1px solid #ddd;
+          box-sizing: border-box;
+          &_block{
+            width:calc(100% /3);
+            height: 40px;
+            float: left;
+            border-right: 1px solid #ddd;
+            box-sizing: border-box;
+          }
         }
       }
       &:nth-of-type(7){
