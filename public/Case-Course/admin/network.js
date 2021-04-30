@@ -12,6 +12,7 @@ var gServerAPI = "/api",
   gModifyNotInClassUser = new Object(),
   gAlertCount = 0;
 var gActivityList = new Array();
+var gOrigianlActivityList = new Array();
 function GetAllActivity() {
   $.ajax({
     url: "/event/list",
@@ -24,39 +25,70 @@ function GetAllActivity() {
       obj["event_id"] = -1;
       obj["name"] = "+";
       gActivityList.splice(0, 0, obj);
+      gOrigianlActivityList = res.eventList;
+      gOrigianlActivityList.splice(0, 0, obj);
+      console.log(gActivityList);
       UpdateActivity();
     },
   });
 }
 function GetActivityDetail(index) {
-  if (index == 0) {
-    var eventData = new Object();
-    eventData.name = "";
-    eventData.description = "";
-    eventData.isActive = "1";
-    eventData.startTime = "";
-    eventData.endTime = "";
-    var data = new Object();
-    data.link = "";
-    data.mainImg = "";
-    data.imgs = new Array();
-    eventData.data = data;
-    gActivityList[index].content = eventData;
-    $("#activity_detail_"+index).remove();
-    $("#content_body #activity_block_" + index).after(GenerateActivityDetail(index));
-  } else {
-    $.ajax({
-      url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content/",
-      dataType: "json",
-      type: "get",
-      data: "",
-      success: function (res) {
-        gActivityList[index].content = res;
-        // gActivityList = res.eventList;
-        // UpdateActivity();
-      },
-    });
+  if($("#activity_detail_" + index).length == 0){
+    if(gActivityList[index].content == undefined){
+      if (index == 0) {
+        var eventData = new Object();
+        eventData.name = "";
+        eventData.description = "";
+        eventData.isActive = "1";
+        eventData.startTime = "";
+        eventData.endTime = "";
+        var data = new Object();
+        data.link = "";
+        data.mainImg = "";
+        data.imgs = new Array();
+        data.imgs.push("");
+        eventData.data = data;
+        gActivityList[index].content = eventData;
+        gOrigianlActivityList[index].content = eventData;
+        UpdateActivityDetail(index);
+      } else {
+        $.ajax({
+          url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content/",
+          dataType: "json",
+          type: "get",
+          data: "",
+          success: function (res) {
+            gActivityList[index].content = res.eventData;
+            gOrigianlActivityList[index].content = res.eventData;
+            UpdateActivityDetail(index);
+          },
+        });
+      }
+    }
+    else{
+      UpdateActivityDetail(index);
+    }
   }
+  else{
+    if(CheckActicityData(index)){
+      console.log("有修改");
+      if(confirm("已修改過資料，請問是否儲存?")){
+        $("#activity_detail_" + index).remove();
+      }
+    }
+    else{
+      $("#activity_detail_" + index).remove();
+    }
+  } 
+}
+function CheckActicityData(index){
+  var res = false;
+  var now = gActivityList[index].content;
+  var before = gOrigianlActivityList[index].content;
+  if(now.name != before.name){
+    res = true
+  }
+  return res;
 }
 function GetAllRealClass() {
   var a = gServerAPI + "/course/index.php/course/list";
@@ -304,7 +336,7 @@ function SetNewClass(e) {
     },
   });
 }
-function UploadImage(e, s, o) {
+function UploadImage(e, s, o , type, subIndex) {
   var c = gServerAPI + "/course/index.php/file/image/upload",
     t = new FormData();
   t.append("img_pos", e),
@@ -321,6 +353,16 @@ function UploadImage(e, s, o) {
         }
         if ((CheckStatus(t, c), "success" == t.status)) {
           if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
+            if(type == "activity_detail_subImage_add"){
+              gActivityList[o].content.data.imgs.push(t.path);
+            }
+            else if(type == "activity_detail_mainImage_change"){
+              gActivityList[o].content.data.mainImg = t.path;
+            }
+            else if(type == "activity_detail_subImage_change"){
+              gActivityList[o].content.data.imgs[subIndex] = t.path;
+            }
+            UpdateActivityDetail(o);
           } else {
             for (var e = 0; e < gAllModifyClasses.length; e++)
               if (gAllModifyClasses[e].id == o) {

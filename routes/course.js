@@ -20,10 +20,10 @@ router.get("/api/event/index.php/event/:id/content/", function (req, res, next) 
   eventData.endTime = "1618027691";
   var data = new Object();
   data.link = "http://link";
-  data.mainImg = "/123.jpg";
+  data.mainImg = "./123.jpg";
   data.imgs = new Array();
   for (var i = 0; i < 3; i++) {
-    data.imgs.push("/" + i + ".jpg");
+    data.imgs.push("./" + i + ".jpg");
   }
   eventData.data = data;
   obj["eventData"] = eventData;

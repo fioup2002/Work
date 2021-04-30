@@ -1129,7 +1129,7 @@ function ReadURL(e, a, i) {
         t += "<img class='fill_parent' src='" + e.target.result + "'>";
         if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
           $("#activity_detail_mainImg_" + a).attr("src", e.target.result);
-          ConfirmActivityImage("activity_detail_mainImg_file_" + a, a);
+          AddActivityMainImage(a);
         } else {
           $("#class_" + a + "_add_image")
             .empty()
@@ -1138,7 +1138,12 @@ function ReadURL(e, a, i) {
         }
       } else {
         if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
-          $("#activity_detail_mainImg_" + a).attr("src", e.target.result);
+          $("#activity_detail_subImage_" + a + "_" + i)
+            .attr("src", e.target.result)
+            .show();
+          if (i == 0) {
+            $("#activity_detail_subImage_hint_" + a + "_" + i).hide();
+          }
         } else {
           $("#class_" + a + "_image_" + i).attr("src", e.target.result), ConfirmChangeImage(a, i);
         }
@@ -1326,14 +1331,6 @@ function ConfirmChangeImage(e, t) {
   var a = $("#class_" + e + "_" + t + "_image_file")[0].files[0];
   null != a ? UploadImage("thumb", a, e) : alert("請上傳照片");
 }
-function ConfirmActivityImage(id, index) {
-  var file = $("#" + id)[0].files[0];
-  if (file != null) {
-    UploadImage("thumb", file, index);
-  } else {
-    alert("請上傳照片");
-  }
-}
 function ConfirmAddSpec(e) {
   var t = 86400 * $("#class_" + e + "_add_day").val(),
     a = $("#class_" + e + "_add_price").val();
@@ -1498,49 +1495,50 @@ function UpdateActivity() {
 }
 function GenerateActivityBlock(index, text) {
   var res = "";
-  res += "<div id='activity_block_"+index+"' class='activity_block' onclick='GetActivityDetail(" + index + ")'>";
+  res += "<div id='activity_block_" + index + "' class='activity_block' onclick='GetActivityDetail(" + index + ")'>";
   res += GenerateNormalString(text, "font-size: 20px");
   res += "</div>";
   return res;
 }
 function GenerateActivityDetail(index) {
+  console.log(gActivityList[index].content);
   var res = "";
   res += "<div class='activity_detail' id='activity_detail_" + index + "'>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("名字:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='text' id='activity_detail_name_" + index + "' class='activity_detail_line_input'></input>";
+  res += "<input type='text' id='activity_detail_name_" + index + "' class='activity_detail_line_input' value='" + gActivityList[index].content.name + "' onchange='ChangeActivityData('activity_detail_name_', \""+index+"\")'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("描述:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='text' id='activity_detail_description_" + index + "' class='activity_detail_line_input'></input>";
+  res += "<input type='text' id='activity_detail_description_" + index + "' class='activity_detail_line_input' value='" + gActivityList[index].content.description + "'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("開始時間:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='date' id='activity_detail_startTime_" + index + "' class='activity_detail_line_input'></input>";
+  res += "<input onkeydown='return false' type='date' id='activity_detail_startTime_" + index + "' class='activity_detail_line_input' value='" + ChangeTimestampToDate(gActivityList[index].content.startTime) + "'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("結束時間:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='date' id='activity_detail_endTime_" + index + "' class='activity_detail_line_input'></input>";
+  res += "<input onkeydown='return false' type='date' id='activity_detail_endTime_" + index + "' class='activity_detail_line_input'  value='" + ChangeTimestampToDate(gActivityList[index].content.endTime) + "'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("啟動:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='checkbox' id='activity_detail_active_" + index + "' class='activity_detail_line_input' style='width: 50px;margin-left:10px'></input>";
+  res += "<input type='checkbox' id='activity_detail_active_" + index + "' class='activity_detail_line_input' "+(gActivityList[index].content.isActive == 1? "checked":"")+" style='width: 50px;margin-left:10px'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("連結:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='text' id='activity_detail_link_" + index + "' class='activity_detail_line_input'></input>";
+  res += "<input type='text' id='activity_detail_link_" + index + "' class='activity_detail_line_input' value='"+gActivityList[index].content.data.link+"'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
@@ -1548,8 +1546,14 @@ function GenerateActivityDetail(index) {
   res += "</div>";
   res += "<div class='activity_detail_line_img_block'>";
   res += "<label class='activity_detail_line_img'>";
-  res += "<img id='activity_detail_mainImg_" + index + "' class='fill_parent'></img>";
-  res += "<input id='activity_detail_mainImg_file_" + index + "' style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\")' accept='image/*'>";
+  if (gActivityList[index].content.data.mainImg.length == 0) {
+    res += "<div class='activity_detail_line_img_no'>";
+    res += GenerateNormalString("選擇圖片", "font-size: 20px;");
+    res += "</div>";
+  } else {
+    res += "<img id='activity_detail_mainImage_" + index + "' class='fill_parent' src='" + gActivityList[index].content.data.mainImg + "'></img>";
+  }
+  res += "<input id='activity_detail_mainImage_file_" + index + "' style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\")' accept='image/*'>";
   res += "</label>";
   res += "</div>";
   res += "</div>";
@@ -1557,35 +1561,84 @@ function GenerateActivityDetail(index) {
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("子圖:", "font-size: 20px;");
   res += "</div>";
-  console.log(gActivityList[index].content);
+  res += "<div class='activity_detail_line_img_block'>";
   for (var i = 0; i < gActivityList[index].content.data.imgs.length; i++) {
-    res += "<div class='activity_detail_line_img_block'>";
-    res += "<div class='activity_detail_line_img_block_button'>";
+    res += "<div id='activity_detail_subImage_block_" + index + "_" + i + "' class='activity_detail_line_img_block_button'>";
     res += "<label class='activity_detail_line_img_block_button_top'>";
-    res += "<img class='fill_parent'></img>";
-    res += "<input style='display:none;' type='file' onchange='ReadURL(this,\"" + index + "\")' accept='image/*'>";
+    if (i == 0) {
+      res += "<img id='activity_detail_subImage_" + index + "_" + i + "' class='fill_parent' style='display:none'></img>";
+      res += "<div id='activity_detail_subImage_hint_" + index + "_" + i + "' class='activity_detail_line_img_no'>";
+      res += GenerateNormalString("選擇圖片", "font-size: 20px;");
+      res += "</div>";
+    } else {
+      res += "<img id='activity_detail_subImage_" + index + "_" + i + "' class='fill_parent' src='" + gActivityList[index].content.data.imgs[i] + "'></img>";
+    }
+    res += "<input id='activity_detail_subImage_file_" + index + "_" + i + "' style='display:none;' type='file' onchange='ReadURL(this,\"" + index + '", "' + i + "\")' accept='image/*'>";
     res += "</label>";
     res += "<div class='activity_detail_line_img_block_button_bottom'>";
     if (i == 0) {
-      res += "<div class='activity_detail_line_img_block_button_bottom_block'>";
+      res += "<div class='activity_detail_line_img_block_button_bottom_block' style='width: 100%' onclick='AddActivitySubImage(\"" + index + "\", 0)'>";
       res += GenerateNormalString("新增", "font-size: 20px;");
       res += "</div>";
     } else {
-      res += "<div class='activity_detail_line_img_block_button_bottom_block'>";
+      res += "<div class='activity_detail_line_img_block_button_bottom_block' onclick='ForwardActivitySubImage(\"" + index + '", "' + i + "\")'>";
       res += GenerateNormalString("往前", "font-size: 20px;");
       res += "</div>";
-      res += "<div class='activity_detail_line_img_block_button_bottom_block'>";
+      res += "<div class='activity_detail_line_img_block_button_bottom_block' onclick='BackwardActivitySubImage(\"" + index + '", "' + i + "\")'>";
       res += GenerateNormalString("往後", "font-size: 20px;");
       res += "</div>";
-      res += "<div class='activity_detail_line_img_block_button_bottom_block'>";
+      res += "<div class='activity_detail_line_img_block_button_bottom_block' onclick='DeleteActivitySubImage(\"" + index + '", "' + i + "\")'>";
       res += GenerateNormalString("刪除", "font-size: 20px;");
       res += "</div>";
     }
     res += "</div>";
     res += "</div>";
-    res += "</div>";
   }
   res += "</div>";
   res += "</div>";
+  res += "</div>";
   return res;
+}
+function UpdateActivityDetail(index) {
+  $("#activity_detail_" + index).remove();
+  $("#content_body #activity_block_" + index).after(GenerateActivityDetail(index));
+  if (gActivityList[index].content.data.imgs.length >= 9) {
+    $("#activity_detail_subImage_block_" + index + "_" + 0).hide();
+  }
+}
+function AddActivityMainImage(index) {
+  var file = $("#activity_detail_mainImage_file_" + index)[0].files[0];
+  if (file != null) {
+    UploadImage("thumb", file, index, "activity_detail_mainImage_change");
+  } else {
+    alert("請上傳照片");
+  }
+}
+function AddActivitySubImage(index, subIndex) {
+  var file = $("#activity_detail_subImage_file_" + index + "_" + subIndex)[0].files[0];
+  if (file != null) {
+    if (subIndex == 0) {
+      UploadImage("thumb", file, index, "activity_detail_subImage_add");
+    } else {
+      UploadImage("thumb", file, index, "activity_detail_subImage_change", subIndex);
+    }
+  } else {
+    alert("請上傳照片");
+  }
+}
+function DeleteActivitySubImage(index, subIndex) {
+  gActivityList[index].content.data.imgs.splice(subIndex, 1);
+  UpdateActivityDetail(index);
+}
+function ChangeTimestampToDate(timestamp){
+  return (new Date(timestamp * 1000).toISOString()).split("T")[0];
+}
+function ChangeActivityData(id, index, subindex){
+  if (subindex == undefined){
+    var val = $("#"+id+index).val();
+    console.log(val);
+  }
+  else{
+
+  }
 }

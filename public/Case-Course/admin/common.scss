@@ -44,11 +44,17 @@
         height: 210px;
         float: left;
         margin-left: 10px;
+        &_no{
+          height: 100%;
+          border: 1px solid #DDD;
+          box-sizing: border-box;
+        }
       }
       &_img_block_button{
         width: 280px;
         float: left;
         margin-left: 10px;
+        margin-top: 10px;
         &_top{
           width: 280px;
           height: 210px;
