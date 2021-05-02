@@ -48,6 +48,20 @@ function SendCommand(e, s) {
     r = gToken,
     a = "POST",
     n = "";
+  if (e == CMD_GET_ACTIVITY) {
+    SendAJAX(CMD_GET_ACTIVITY, "", "/event/list", r, "GET", n);
+    return;
+  } else if (e == CMD_GET_ACtiVITY_DETAIL) {
+    SendAJAX(
+      CMD_GET_ACtiVITY_DETAIL,
+      s,
+      "/api/event/index.php/event/" + s + "/content/",
+      r,
+      "GET",
+      n
+    );
+    return;
+  }
   e == CMD_GET_CLASS
     ? ((t = server + course_api + indexphp + "/course/user/list"),
       (a = "GET"),
@@ -183,6 +197,23 @@ function ParseReponse(e, s, t) {
         AddFreeCourseToBought();
         UpdateClass();
       }
+    }
+  } else if (e == CMD_GET_ACTIVITY) {
+    if (r.status == "success") {
+      gActivitys = r.eventList;
+      $($(".pragrah_title")[0]).after(GenerateActivity());
+    }
+  } else if (e == CMD_GET_ACtiVITY_DETAIL) {
+    if (r.status == "success") {
+      var index = 0;
+      for (var i = 0; i < gActivitys.length; i++) {
+        if(gActivitys[i].event_id == s){
+          gActivitys[i].content = r.eventData;
+          index = i;
+        }
+      }
+      $("#act_detail_"+ index).append(GenerateActivityDetail(index)).show();
+
     }
   } else if (e == CMD_LOGIN)
     "success" == r.status

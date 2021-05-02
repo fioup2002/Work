@@ -20,8 +20,8 @@
         width: 300px;
         height: 225px;
         margin: auto;
-        background: rgba(255, 0, 0, 0.5);
         margin-top: 20px;
+        display: block;
       }
       &_title {
         width: 300px;
@@ -69,19 +69,21 @@
         width: calc(300px * 1.5);
         height: calc(225px * 1.5);
         margin: auto;
-        background: rgba(255, 0, 0, 0.5);
         margin-top: 20px;
+        display: block;
       }
       &_imgs {
         width: 70%;
         height: 100px;
         margin: auto;
         margin-top: 20px;
+        overflow: hidden;
         &_icon {
           width: calc((100% - 10px * 9) / 8);
           height: 100%;
           margin-left: 10px;
           float: left;
+          display: block;
         }
       }
       &_text {
@@ -126,5 +128,6 @@
     height: calc(1200px / 4 * 3);
     left: calc((100% - 1200px) / 2);
     top: calc((100% - (1200px / 4 * 3)) / 2);
+    display: block;
   }
 }
