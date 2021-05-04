@@ -1,11 +1,17 @@
 function InitialScreen() {
   if (
-    (navigator.userAgent.search("Safari") <= -1 && alert("本站建議使用Google Chrome瀏覽器以獲得最佳使用體驗"), (gCurrentPage = PAGE_INDEX), 0 != localStorage.length && 0 != localStorage.token.length)
+    (navigator.userAgent.search("Safari") <= -1 &&
+      alert("本站建議使用Google Chrome瀏覽器以獲得最佳使用體驗"),
+    (gCurrentPage = PAGE_INDEX),
+    0 != localStorage.length && 0 != localStorage.token.length)
   ) {
     gToken = localStorage.token;
     var e = new Array();
-    e.push(gToken), (gIsCheckToken = !0), SendCommand(CMD_CHECK_TOKEN, CreateJSONObject(CMD_CHECK_TOKEN, e));
+    e.push(gToken),
+      (gIsCheckToken = !0),
+      SendCommand(CMD_CHECK_TOKEN, CreateJSONObject(CMD_CHECK_TOKEN, e));
   } else SendCommand(CMD_GET_CLASS, CreateJSONObject(CMD_GET_CLASS, null));
+  SendCommand(CMD_GET_ACTIVITY, CreateJSONObject(CMD_GET_ACTIVITY, null));
   $("body").append(GenerateBody()),
     $("body").append(GenerateAlertMenu()),
     $(".alert_menu").on("click", function (e) {
@@ -21,7 +27,6 @@ function GenerateBody() {
     (e += GenerateHeader(PAGE_INDEX)),
     (e += GenerateInformation()),
     (e += GenerateParagraphTitle("外拍活動")),
-    (e += GenerateActivity()),
     (e += GenerateParagraphTitle("課堂錄影")),
     (e += GenerateRealClass()),
     (e += GenerateParagraphTitle("線上課程")),
@@ -33,7 +38,10 @@ function GenerateBody() {
     (e += GenerateParagraphTitle("聯絡資訊")),
     (e += GenerateContact()),
     (e += "<div class='pragrah_title'>"),
-    (e += GenerateTitleString("Copyright 2019 © 朱智青老師影像 All Rights Reserved", "font-size:16px;color:#A5A5A5;text-align:center")),
+    (e += GenerateTitleString(
+      "Copyright 2019 © 朱智青老師影像 All Rights Reserved",
+      "font-size:16px;color:#A5A5A5;text-align:center"
+    )),
     (e += "</div>"),
     (e += "</div>"),
     (e += GenerateLargeImageBlock())
@@ -41,7 +49,14 @@ function GenerateBody() {
 }
 function GenerateParagraphTitle(e) {
   var t = "";
-  return (t += "<div class='pragrah_title'>"), (t += GenerateTitleString(e, "font-size: 30px;font-weight:bold;letter-spacing:5;text-align:center")), (t += "</div>");
+  return (
+    (t += "<div class='pragrah_title'>"),
+    (t += GenerateTitleString(
+      e,
+      "font-size: 30px;font-weight:bold;letter-spacing:5;text-align:center"
+    )),
+    (t += "</div>")
+  );
 }
 function GenerateInformation() {
   return (
@@ -63,59 +78,25 @@ function GenerateActivity() {
   var result = "";
   result += "<div class='act'>";
   result += "<div class='act_content'>";
-  //test
-  gActivitys = [];
-  for (var i = 0; i < 10; i++) {
-    var obj = new Object();
-    obj.img = "test.jpg";
-    obj.title = "title_" + i;
-    obj.subtitle = "subtitle_" + i;
-    obj.imgs = ["#F00", "#0F0", "#00F", "#FF0", "#F0F", "#0FF", "rgba(0,0,255,0.5)", "rgba(0,255,0,0.5)"];
-    obj.href = "https://www.google.com.tw/";
-    gActivitys.push(obj);
-  }
-  //test
-  // ◼ 主題名稱
-  // ◼ 活動主照片(大圖)
-  // ◼ 活動敘述
-  // ◼ 活動照片(最多八張，排列為 2x4，每張照片點下後要顯示放大圖)
-  // ◼ 我要報名(button)，開新分頁到外部網站
   for (var i = 0; i < gActivitys.length; i++) {
     var obj = gActivitys[i];
     result += "<div class='act_content_block'>";
-    result += "<div class='act_content_block_img'>";
-    result += "</div>";
+    result +=
+      "<img class='act_content_block_img' style='background: " +
+      obj.mainImg +
+      "'>";
+    result += "</img>";
     result += "<div class='act_content_block_title'>";
-    result += GenerateNormalString(obj.title, "", "");
+    result += GenerateNormalString(obj.name, "", "");
     result += "</div>";
-    result += "<div id='id='act_btn_" + i + "'' class='act_content_block_btn' onclick='ShowActivityDetatil(" + i + ")'>";
+    result +=
+      "<div id='id='act_btn_" +
+      i +
+      "'' class='act_content_block_btn' onclick='SendCommand(\""+CMD_GET_ACtiVITY_DETAIL+"\", \""+obj.event_id+"\")'>";
     result += GenerateNormalString("查看詳情", "text-align: center", "");
     result += "</div>";
     result += "</div>";
     result += "<div class='act_content_detail' id='act_detail_" + i + "'>";
-    result += "<div class='act_content_detail_title'>";
-    result += "<div class='act_content_detail_title_left'>";
-    result += GenerateNormalString(obj.title, "text-align: center; font-size: x-large; font-weight: bold", "");
-    result += "</div>";
-    result += "<div class='act_content_detail_title_right' onclick='CloseActivityDetail()'>";
-    result += GenerateNormalString("X", "text-align: center; font-size: x-large; font-weight: bold", "");
-    result += "</div>";
-    result += "</div>";
-    result += "<div class='act_content_detail_img' >";
-    result += "</div>";
-    result += "<div class='act_content_detail_imgs'>";
-    for (var j = 0; j < obj.imgs.length; j++) {
-      var img = obj.imgs[j];
-      result += "<div class='act_content_detail_imgs_icon' style='background:" + img + "' onclick='ShowLargeImage(" + i + " ," + j + ")'>";
-      result += "</div>";
-    }
-    result += "</div>";
-    result += "<div class='act_content_detail_text'>";
-    result += GenerateNormalString(obj.subtitle, "", "");
-    result += "</div>";
-    result += "<a class='act_content_detail_btn' href='" + obj.href + "' target='_blank'>";
-    result += GenerateNormalString("我要報名", "text-align: center;", "");
-    result += "</a>";
     result += "</div>";
   }
   result += "</div>";
@@ -127,31 +108,119 @@ function GenerateLargeImageBlock() {
   res += "<div class='largeImage' onclick='CloseLargeImage()'>";
   res += "<div class='largeImage_background' >";
   res += "</div>";
-  res += "<div class='largeImage_content'>";
-  res += "</div>";
+  res += "<img class='largeImage_content'>";
+  res += "</img>";
   res += "</div>";
   return res;
 }
+function GenerateActivityDetail(index) {
+  var result = "";
+  result += "<div class='act_content_detail_title'>";
+  result += "<div class='act_content_detail_title_left'>";
+  result += GenerateNormalString(
+    gActivitys[index].name,
+    "text-align: center; font-size: x-large; font-weight: bold",
+    ""
+  );
+  result += "</div>";
+  result +=
+    "<div class='act_content_detail_title_right' onclick='CloseActivityDetail(\"" +
+    index +
+    "\")'>";
+  result += GenerateNormalString(
+    "X",
+    "text-align: center; font-size: x-large; font-weight: bold",
+    ""
+  );
+  result += "</div>";
+  result += "</div>";
+  result +=
+    "<img class='act_content_detail_img' style='background:" +
+    gActivitys[index].mainImg +
+    "' >";
+  result += "</img>";
+  result += "<div class='act_content_detail_imgs'>";
+  for (var j = 0; j < gActivitys[index].content.data.imgs.length; j++) {
+    var img = gActivitys[index].content.data.imgs[j];
+    result +=
+      "<img class='act_content_detail_imgs_icon' style='background:" +
+      img +
+      "' onclick='ShowLargeImage(" +
+      index +
+      " ," +
+      j +
+      ")'>";
+    result += "</img>";
+  }
+  result += "</div>";
+  result += "<div class='act_content_detail_text'>";
+  result += GenerateNormalString(gActivitys[index].content.description, "", "");
+  result += "</div>";
+  result +=
+    "<a class='act_content_detail_btn' href='" +
+    gActivitys[index].content.data.link +
+    "' target='_blank'>";
+  result += GenerateNormalString("我要報名", "text-align: center;", "");
+  result += "</a>";
+
+  return result;
+}
 function UpdateClass() {
-  for (var e = "", t = 0; t < gReal_classes.length; t++) e += GenerateClassBlock(t, gReal_classes[t]);
-  0 == e.length && (e += GenerateNormalString("您目前沒有參與的線下課程", "text-align:center")), $(".main_real_class").empty().append(e), (e = "");
-  for (t = 0; t < gBought_classes.length; t++) e += GenerateClassBlock(t, gBought_classes[t]);
-  0 == e.length && (e += GenerateNormalString("您目前沒有可以觀看的線上課程", "text-align:center")), $(".main_bought_class").empty().append(e), (e = "");
+  for (var e = "", t = 0; t < gReal_classes.length; t++)
+    e += GenerateClassBlock(t, gReal_classes[t]);
+  0 == e.length &&
+    (e += GenerateNormalString(
+      "您目前沒有參與的線下課程",
+      "text-align:center"
+    )),
+    $(".main_real_class").empty().append(e),
+    (e = "");
+  for (t = 0; t < gBought_classes.length; t++)
+    e += GenerateClassBlock(t, gBought_classes[t]);
+  0 == e.length &&
+    (e += GenerateNormalString(
+      "您目前沒有可以觀看的線上課程",
+      "text-align:center"
+    )),
+    $(".main_bought_class").empty().append(e),
+    (e = "");
   for (t = 0; t < gClasses.length; t++) e += GenerateClassBlock(t, gClasses[t]);
-  0 == e.length && (e += GenerateNormalString("您目前沒有可以購買的線上課程", "text-align:center")), $(".main_class").empty().append(e);
+  0 == e.length &&
+    (e += GenerateNormalString(
+      "您目前沒有可以購買的線上課程",
+      "text-align:center"
+    )),
+    $(".main_class").empty().append(e);
   var n = 0;
-  (n = 0 == gReal_classes.length ? 40 : 393 * Math.ceil(gReal_classes.length / 3) + 3),
+  (n =
+    0 == gReal_classes.length
+      ? 40
+      : 393 * Math.ceil(gReal_classes.length / 3) + 3),
     $(".main_real_class").css("height", n),
-    (n = (n = 0) == gBought_classes.length ? 40 : 393 * Math.ceil(gBought_classes.length / 3) + 3),
+    (n =
+      (n = 0) == gBought_classes.length
+        ? 40
+        : 393 * Math.ceil(gBought_classes.length / 3) + 3),
     $(".main_bought_class").css("height", n),
-    (n = (n = 0) == gClasses.length ? 40 : 393 * Math.ceil(gClasses.length / 3) + 3),
+    (n =
+      (n = 0) == gClasses.length
+        ? 40
+        : 393 * Math.ceil(gClasses.length / 3) + 3),
     $(".main_class").css("height", n);
 }
 function GenerateRealClass() {
-  return "<div class='main_real_class'>", "</div>", "<div class='main_real_class'></div>";
+  return (
+    "<div class='main_real_class'>",
+    "</div>",
+    "<div class='main_real_class'></div>"
+  );
 }
 function GenerateBoughtClass() {
-  return "<div class='main_bought_class'>", "</div>", "<div class='main_bought_class'></div>";
+  return (
+    "<div class='main_bought_class'>",
+    "</div>",
+    "<div class='main_bought_class'></div>"
+  );
 }
 function GenerateClass() {
   return "<div class='main_class'>", "</div>", "<div class='main_class'></div>";
@@ -161,7 +230,11 @@ function GenerateClassBlock(e, t) {
     a = "加入購物車",
     i = button_cancel_color,
     l = "class_status_" + e;
-  (1 != t.isValid && 2 != t.courseType) || ((n = "ShowVideoList(" + e + "," + t.courseType + ")"), (a = "觀看課程"), (i = button_ok_color), (l = ""));
+  (1 != t.isValid && 2 != t.courseType) ||
+    ((n = "ShowVideoList(" + e + "," + t.courseType + ")"),
+    (a = "觀看課程"),
+    (i = button_ok_color),
+    (l = ""));
   var s = "";
   if (
     ((s += "<div class='main_class_block'>"),
@@ -170,9 +243,11 @@ function GenerateClassBlock(e, t) {
     (s += GenerateNormalString(t.name, "text-align:center;font-size:20px;")),
     (s += "</div>"),
     1 == t.isValid && 2 != t.courseType
-      ? (s += "<div class='main_class_block_info' style='height:calc(30px * 3);'>")
+      ? (s +=
+          "<div class='main_class_block_info' style='height:calc(30px * 3);'>")
       : 2 == t.courseType
-      ? (s += "<div class='main_class_block_info' style='height:calc(30px * 4);'>")
+      ? (s +=
+          "<div class='main_class_block_info' style='height:calc(30px * 4);'>")
       : (s += "<div class='main_class_block_info' >"),
     (s += GenerateNormalString(t.description, "text-align:center")),
     (s += "</div>"),
@@ -180,15 +255,34 @@ function GenerateClassBlock(e, t) {
       0 == t.isValid &&
       (null == t.ext_data && (t.ext_data = new Object()),
       null == t.ext_data.intro_video && (t.ext_data.intro_video = ""),
-      (s += "<div class='main_class_block_line' onclick='ChangeToVideoPage(\"" + t.ext_data.intro_video + "\")'>"),
+      (s +=
+        "<div class='main_class_block_line' onclick='ChangeToVideoPage(\"" +
+        t.ext_data.intro_video +
+        "\")'>"),
       (s += GenerateNormalString("介紹影片", "text-align:center;color:#00F")),
       (s += "</div>")),
     2 != t.courseType && 2 != t.isActive && t.isFree != 1)
   ) {
-    if (((s += "<div class='main_class_block_line'>"), (s += "<div class='main_class_block_line_key'>"), (s += GenerateNormalString("期間", "text-align:center")), (s += "</div>"), 1 == t.isValid))
-      (s += "<div class='main_class_block_line_value'>"), (s += GenerateNormalString(GetValidTime(t.expireTime, !1), "text-align:center")), (s += "</div>");
+    if (
+      ((s += "<div class='main_class_block_line'>"),
+      (s += "<div class='main_class_block_line_key'>"),
+      (s += GenerateNormalString("期間", "text-align:center")),
+      (s += "</div>"),
+      1 == t.isValid)
+    )
+      (s += "<div class='main_class_block_line_value'>"),
+        (s += GenerateNormalString(
+          GetValidTime(t.expireTime, !1),
+          "text-align:center"
+        )),
+        (s += "</div>");
     else {
-      s += "<select id='duration_" + e + "' class='main_class_block_line_value' onchange='ChangePrice(" + e + ")' style='text-align-last:center;'>";
+      s +=
+        "<select id='duration_" +
+        e +
+        "' class='main_class_block_line_value' onchange='ChangePrice(" +
+        e +
+        ")' style='text-align-last:center;'>";
       for (var r = 0; r < t.specs.length; r++) {
         var o = GetValidTime(t.specs[r].duration, !0);
         s += "<option value='" + t.specs[r].duration + "'>" + o + "</option>";
@@ -198,7 +292,10 @@ function GenerateClassBlock(e, t) {
     s += "</div>";
   }
   return (
-    2 == t.isActive && ((s += "<div class='main_class_block_line'>"), (s += GenerateNormalString("課程建構中，敬請期待", "text-align:center")), (s += "</div>")),
+    2 == t.isActive &&
+      ((s += "<div class='main_class_block_line'>"),
+      (s += GenerateNormalString("課程建構中，敬請期待", "text-align:center")),
+      (s += "</div>")),
     0 == t.isValid &&
       2 != t.courseType &&
       2 != t.isActive &&
@@ -207,10 +304,17 @@ function GenerateClassBlock(e, t) {
       (s += GenerateNormalString("價格", "text-align:center")),
       (s += "</div>"),
       (s += "<div class='main_class_block_line_value'>"),
-      (s += GenerateNormalString(t.specs[0].price, "text-align:left", "price_" + e)),
+      (s += GenerateNormalString(
+        t.specs[0].price,
+        "text-align:left",
+        "price_" + e
+      )),
       (s += "</div>"),
       (s += "</div>")),
-    2 != t.isActive && ((s += "<div class='main_class_block_line' onclick='" + n + "'>"), (s += GenerateNormalString(a, "text-align:center;" + i, l)), (s += "</div>")),
+    2 != t.isActive &&
+      ((s += "<div class='main_class_block_line' onclick='" + n + "'>"),
+      (s += GenerateNormalString(a, "text-align:center;" + i, l)),
+      (s += "</div>")),
     (s += "</div>")
   );
 }
@@ -219,7 +323,8 @@ function GeneratePic(course) {
   result += "<div class='main_class_block_img' style='position:relative'>";
   result += GetThumbPic(course);
   if (course.isFree == 1) {
-    result += "<div class='main_class_block_img' style='margin-left:0px;margin-top:0px;width:100px;height:60px;min-width:50px;background:#F00;position:absolute'>";
+    result +=
+      "<div class='main_class_block_img' style='margin-left:0px;margin-top:0px;width:100px;height:60px;min-width:50px;background:#F00;position:absolute'>";
     result += GenerateNormalString("免費", "text-align:center;color:#FF0");
     result += "</div>";
   }
@@ -231,14 +336,19 @@ function GetThumbPic(e) {
   if (null != e.pics)
     for (var n = 0; n < e.pics.length; n++) {
       var a = e.pics[n];
-      "thumb" == a.name && (t = "<img class='fill_parent' src='" + a.path + "' style='position:absolute'></img>");
+      "thumb" == a.name &&
+        (t =
+          "<img class='fill_parent' src='" +
+          a.path +
+          "' style='position:absolute'></img>");
     }
   return t;
 }
 function GenerateNormalQuestion() {
   var e = "";
   e += "<div class='main_normal_question'>";
-  for (var t = 0; t < normal_questions.length; t++) e += GenerateNormalQuestionBlock(t);
+  for (var t = 0; t < normal_questions.length; t++)
+    e += GenerateNormalQuestionBlock(t);
   return (e += "</div>");
 }
 function GenerateNormalQuestionBlock(e) {
@@ -246,22 +356,41 @@ function GenerateNormalQuestionBlock(e) {
   return (
     (t += "<div class='main_normal_question_block'>"),
     (t += "<div class='main_normal_question_block_title'>"),
-    (t += GenerateTitleString(normal_questions[e].title, "font-size: 20px;font-weight:bold;letter-spacing:5;")),
+    (t += GenerateTitleString(
+      normal_questions[e].title,
+      "font-size: 20px;font-weight:bold;letter-spacing:5;"
+    )),
     (t += "</div>"),
-    (t += "<div class='main_normal_question_block_plus' onclick='ShowNormalQuestionContent(\"" + e + "\");'>"),
+    (t +=
+      "<div class='main_normal_question_block_plus' onclick='ShowNormalQuestionContent(\"" +
+      e +
+      "\");'>"),
     (t += GenerateNormalString("+", "text-align:center;" + button_ok_color)),
     (t += "</div>"),
     (t += "</div>"),
-    "如何知道我的環境可以觀看站上的課程影片?" == normal_questions[e].title ? (t += GenerateNoramalQuestionBlockVideoContent(e)) : (t += GenerateNoramalQuestionBlockContent(e)),
+    "如何知道我的環境可以觀看站上的課程影片?" == normal_questions[e].title
+      ? (t += GenerateNoramalQuestionBlockVideoContent(e))
+      : (t += GenerateNoramalQuestionBlockContent(e)),
     t
   );
 }
 function GenerateNoramalQuestionBlockContent(e) {
   var t = "";
   return (
-    (t += "<div id='normal_question_content_" + e + "' class='main_normal_question_block_content' style='height:" + 30 * normal_questions[e].answer.split("<br>").length + "px'>"),
-    (t += "<div id='normal_question_content_" + e + "' class='main_normal_question_block_content_block'>"),
-    (t += GenerateNormalString(normal_questions[e].answer, "font-size: 16px;font-weight:bold;letter-spacing:5;")),
+    (t +=
+      "<div id='normal_question_content_" +
+      e +
+      "' class='main_normal_question_block_content' style='height:" +
+      30 * normal_questions[e].answer.split("<br>").length +
+      "px'>"),
+    (t +=
+      "<div id='normal_question_content_" +
+      e +
+      "' class='main_normal_question_block_content_block'>"),
+    (t += GenerateNormalString(
+      normal_questions[e].answer,
+      "font-size: 16px;font-weight:bold;letter-spacing:5;"
+    )),
     (t += "</div>"),
     (t += "</div>")
   );
@@ -269,10 +398,19 @@ function GenerateNoramalQuestionBlockContent(e) {
 function GenerateNoramalQuestionBlockVideoContent(e) {
   var t = "";
   return (
-    (t += "<div id='normal_question_content_" + e + "' class='main_normal_question_block_content' style='height:400px'>"),
-    (t += "<div id='normal_question_content_" + e + "' class='main_normal_question_block_content_block'>"),
+    (t +=
+      "<div id='normal_question_content_" +
+      e +
+      "' class='main_normal_question_block_content' style='height:400px'>"),
+    (t +=
+      "<div id='normal_question_content_" +
+      e +
+      "' class='main_normal_question_block_content_block'>"),
     (t += "<div class='main_normal_question_block_content_block_message'>"),
-    (t += GenerateNormalString(normal_questions[e].answer, "font-size: 16px;font-weight:bold;letter-spacing:5;")),
+    (t += GenerateNormalString(
+      normal_questions[e].answer,
+      "font-size: 16px;font-weight:bold;letter-spacing:5;"
+    )),
     (t += "</div>"),
     (t += "<div class='main_normal_question_block_content_block_video'>"),
     (t +=
@@ -287,7 +425,13 @@ function GenerateNoramalQuestionBlockVideoContent(e) {
 }
 function GenerateContact() {
   var e = "";
-  return (e += "<div class='main_contact'>"), (e += "<div class='main_contact_content'>"), (e += GenerateNormalString("寫信: w5011aa@gmail.com")), (e += "</div>"), (e += "</div>");
+  return (
+    (e += "<div class='main_contact'>"),
+    (e += "<div class='main_contact_content'>"),
+    (e += GenerateNormalString("寫信: w5011aa@gmail.com")),
+    (e += "</div>"),
+    (e += "</div>")
+  );
 }
 function UpdateClassContent() {
   // gClass_content = {
@@ -329,12 +473,24 @@ function UpdateClassContent() {
   // "attachFiles": []
   // }
   $("#video_class_title").html(gClass_content.name);
-  for (var e = "", t = 0; t < gClass_content.chapters.length; t++) e += GenerateVideoBlockList(gClass_content.chapters[t], t, gClass_content);
-  (e += GenerateEmptyBorder()), $(".alert_content_video").empty().append(e), $(".alert_content_attatch").empty().append(GenerateAttachList(gClass_content.attachFiles));
+  for (var e = "", t = 0; t < gClass_content.chapters.length; t++)
+    e += GenerateVideoBlockList(gClass_content.chapters[t], t, gClass_content);
+  (e += GenerateEmptyBorder()),
+    $(".alert_content_video").empty().append(e),
+    $(".alert_content_attatch")
+      .empty()
+      .append(GenerateAttachList(gClass_content.attachFiles));
   if (gClass_content.isFree == 1) {
     for (var i = 0; i < gClass_content.chapters.length; i++) {
       for (var j = 0; j <= 3; j++) {
-        $("#" + gClass_content.chapters[i].chapNo + "_" + gClass_content.name + "_" + j).html("");
+        $(
+          "#" +
+            gClass_content.chapters[i].chapNo +
+            "_" +
+            gClass_content.name +
+            "_" +
+            j
+        ).html("");
       }
     }
   }
@@ -362,19 +518,44 @@ function GenerateVideoBlockList(e, t, n) {
     (a += "</div>"),
     null == n.expireTime
       ? 1 == e.disableFlag
-        ? ((a += "<div class='alert_content_video_list_duration_title' style='width:calc((90% - 40px) * 0.70);'>"),
-          (a += GenerateTitleString("可觀看本堂課程錄影時間尚未開始", "text-align:right;", e.chapNo + "_" + n.name + "_0")))
+        ? ((a +=
+            "<div class='alert_content_video_list_duration_title' style='width:calc((90% - 40px) * 0.70);'>"),
+          (a += GenerateTitleString(
+            "可觀看本堂課程錄影時間尚未開始",
+            "text-align:right;",
+            e.chapNo + "_" + n.name + "_0"
+          )))
         : 2 == e.disableFlag
-        ? ((a += "<div class='alert_content_video_list_duration_title' style='width:calc((90% - 40px) * 0.70);'>"),
-          (a += GenerateTitleString("可觀看本堂課程錄影時間已過", "text-align:right;", e.chapNo + "_" + n.name + "_1")))
+        ? ((a +=
+            "<div class='alert_content_video_list_duration_title' style='width:calc((90% - 40px) * 0.70);'>"),
+          (a += GenerateTitleString(
+            "可觀看本堂課程錄影時間已過",
+            "text-align:right;",
+            e.chapNo + "_" + n.name + "_1"
+          )))
         : ((a += "<div class='alert_content_video_list_duration_title'>"),
-          (a += GenerateTitleString("觀看到期時間:", "text-align:right;", e.chapNo + "_" + n.name + "_2")),
+          (a += GenerateTitleString(
+            "觀看到期時間:",
+            "text-align:right;",
+            e.chapNo + "_" + n.name + "_2"
+          )),
           (a += "</div>"),
           (a += "<div class='alert_content_video_list_duration'>"),
-          (a += GenerateTitleString(GetValidTime(e.expireTime, !1), "", e.chapNo + "_" + n.name + "_3")))
-      : ((a += "<div class='alert_content_video_list_duration_title'>"), (a += "</div>"), (a += "<div class='alert_content_video_list_duration'>")),
+          (a += GenerateTitleString(
+            GetValidTime(e.expireTime, !1),
+            "",
+            e.chapNo + "_" + n.name + "_3"
+          )))
+      : ((a += "<div class='alert_content_video_list_duration_title'>"),
+        (a += "</div>"),
+        (a += "<div class='alert_content_video_list_duration'>")),
     (a += "</div>"),
-    (a += "<div class='alert_content_video_list_plus' onclick='ShowVideo(\"" + e.chapNo + '",' + t + ")'>"),
+    (a +=
+      "<div class='alert_content_video_list_plus' onclick='ShowVideo(\"" +
+      e.chapNo +
+      '",' +
+      t +
+      ")'>"),
     (a += GenerateNormalString("+", "text-align:center;" + button_ok_color)),
     (a += "</div>"),
     (a += "</div>"),
@@ -384,7 +565,10 @@ function GenerateVideoBlockList(e, t, n) {
 function GenerateVideoBlockListContent(e, t) {
   var n = "";
   return (
-    (n += "<div id='video_list_content_" + e + "' class='alert_content_video_play'>"),
+    (n +=
+      "<div id='video_list_content_" +
+      e +
+      "' class='alert_content_video_play'>"),
     (n +=
       "<iframe id='video_list_content_src_" +
       e +
@@ -401,12 +585,14 @@ function GenerateAttachList(e) {
     (t += "<div class='alert_content_attatch_list_title'>"),
     (t += GenerateTitleString("附件")),
     (t += "</div>"),
-    (t += "<div class='alert_content_attatch_list_title_plus' onclick='ShowAttach()'>"),
+    (t +=
+      "<div class='alert_content_attatch_list_title_plus' onclick='ShowAttach()'>"),
     (t += GenerateNormalString("+", "text-align:center;" + button_ok_color)),
     (t += "</div>"),
     (t += "</div>"),
     (t += "<div id='attach_list'class='alert_content_attatch_info'>");
-  for (var n = 0; n < gClass_content.attachFiles.length; n++) t += GenerateChapterAttach(gClass_content.attachFiles[n]);
+  for (var n = 0; n < gClass_content.attachFiles.length; n++)
+    t += GenerateChapterAttach(gClass_content.attachFiles[n]);
   return (t += "</div>");
 }
 function GenerateChapterAttach(e) {
@@ -416,7 +602,10 @@ function GenerateChapterAttach(e) {
     (t += "<div class='alert_content_attatch_info_block_title'>"),
     (t += GenerateNormalString(e.name, "text-align:left;")),
     (t += "</div>"),
-    (t += "<a class='alert_content_attatch_info_block_link' href=" + e.path + " target='_blank'>"),
+    (t +=
+      "<a class='alert_content_attatch_info_block_link' href=" +
+      e.path +
+      " target='_blank'>"),
     (t += GenerateNormalString("點此下載", "text-align:center;color:#00F")),
     (t += "</a>"),
     (t += "</div>")
@@ -424,20 +613,40 @@ function GenerateChapterAttach(e) {
 }
 function GenerateShoppingCar() {
   var e = "";
-  if (((e += "<div class='alert_menu_block'>"), (e += "<div class='alert_menu_block_boder_block_center_block'>"), 0 == gShoppingCarList.length))
+  if (
+    ((e += "<div class='alert_menu_block'>"),
+    (e += "<div class='alert_menu_block_boder_block_center_block'>"),
+    0 == gShoppingCarList.length)
+  )
     (e += "<div class='alert_menu_block_boder_block_center_block_line'>"),
-      (e += "<div class='alert_menu_block_boder_block_center_block_button' style='margin-left:35%;border:0'>"),
-      (e += GenerateTitleString("無選購課程", "text-align:center;" + button_cancel_color)),
+      (e +=
+        "<div class='alert_menu_block_boder_block_center_block_button' style='margin-left:35%;border:0'>"),
+      (e += GenerateTitleString(
+        "無選購課程",
+        "text-align:center;" + button_cancel_color
+      )),
       (e += "</div>"),
       (e += "</div>");
   else {
-    for (var t = 0; t < gShoppingCarList.length; t++) (e += "<div class='alert_menu_block_boder_block_center_block_line'>"), (e += GenerateShoppingCarItem(gShoppingCarList[t])), (e += "</div>");
+    for (var t = 0; t < gShoppingCarList.length; t++)
+      (e += "<div class='alert_menu_block_boder_block_center_block_line'>"),
+        (e += GenerateShoppingCarItem(gShoppingCarList[t])),
+        (e += "</div>");
     (e += "<div class='alert_menu_block_boder_block_center_block_line'>"),
-      (e += GenerateNormalString("", "color:#F00;text-align:center", "buy_error_text")),
+      (e += GenerateNormalString(
+        "",
+        "color:#F00;text-align:center",
+        "buy_error_text"
+      )),
       (e += "</div>"),
       (e += "<div class='alert_menu_block_boder_block_center_block_line'>"),
-      (e += "<div class='alert_menu_block_boder_block_center_block_button' style='margin-left:35%' onclick='ConfirmShoppingCar()'>"),
-      (e += GenerateTitleString("購買", "text-align:center;" + button_ok_color, "buy_button")),
+      (e +=
+        "<div class='alert_menu_block_boder_block_center_block_button' style='margin-left:35%' onclick='ConfirmShoppingCar()'>"),
+      (e += GenerateTitleString(
+        "購買",
+        "text-align:center;" + button_ok_color,
+        "buy_button"
+      )),
       (e += "</div>"),
       (e += "</div>");
   }
@@ -465,8 +674,14 @@ function GenerateShoppingCarItem(e) {
     (t += "<div class='alert_menu_shopping_car_list_title'>"),
     (t += GenerateNormalString(e.price)),
     (t += "</div>"),
-    (t += "<div class='alert_menu_shopping_car_list_minus' onclick='DeleteSelectedClass(" + e.index + ")'>"),
-    (t += GenerateNormalString("X", "text-align:center;" + button_cancel_color)),
+    (t +=
+      "<div class='alert_menu_shopping_car_list_minus' onclick='DeleteSelectedClass(" +
+      e.index +
+      ")'>"),
+    (t += GenerateNormalString(
+      "X",
+      "text-align:center;" + button_cancel_color
+    )),
     (t += "</div>"),
     (t += "</div>")
   );
@@ -475,7 +690,11 @@ function ShowVideoList(e, t) {
   if (gToken.length != 0) {
     SetDefaultAlerMenu(), $(".alert_menu").append(GenerateVideoList());
     var n = new Array();
-    2 == t ? n.push(gReal_classes[e].id) : n.push(gBought_classes[e].id), SendCommand(CMD_GET_CLASS_CONTENT, CreateJSONObject(CMD_GET_CLASS_CONTENT, n));
+    2 == t ? n.push(gReal_classes[e].id) : n.push(gBought_classes[e].id),
+      SendCommand(
+        CMD_GET_CLASS_CONTENT,
+        CreateJSONObject(CMD_GET_CLASS_CONTENT, n)
+      );
   } else {
     alert("請先登入");
   }
@@ -485,40 +704,66 @@ function ShowVideo(e, t) {
   1 != gClass_content.chapters[t].disableFlag &&
     2 != gClass_content.chapters[t].disableFlag &&
     (n.is(":hidden")
-      ? (n.slideDown(), $("[id='video_list_content_src_" + e + "']").attr("src", gClass_content.chapters[t].link))
-      : (n.slideUp(), $("[id='video_list_content_src_" + e + "']").attr("src", "")));
+      ? (n.slideDown(),
+        $("[id='video_list_content_src_" + e + "']").attr(
+          "src",
+          gClass_content.chapters[t].link
+        ))
+      : (n.slideUp(),
+        $("[id='video_list_content_src_" + e + "']").attr("src", "")));
 }
 function BuyClass(e) {
   if (0 != gToken.length) {
-    for (var t = !1, n = 0; n < gShoppingCarList.length; n++) gShoppingCarList[n].index == e && (t = !0);
+    for (var t = !1, n = 0; n < gShoppingCarList.length; n++)
+      gShoppingCarList[n].index == e && (t = !0);
     if (t) {
-      for (n = 0; n < gShoppingCarList.length; n++) gShoppingCarList[n].index == e && (gShoppingCarList.splice(n, 1), (n = -1));
+      for (n = 0; n < gShoppingCarList.length; n++)
+        gShoppingCarList[n].index == e &&
+          (gShoppingCarList.splice(n, 1), (n = -1));
       UpdateUnboughtClass();
     } else {
       var a = new Object();
-      (a.index = e), (a.duration = $("#duration_" + e).val()), (a.price = $("#price_" + e).html()), gShoppingCarList.push(a), (gIsBuy = !0), UpdateUnboughtClass();
+      (a.index = e),
+        (a.duration = $("#duration_" + e).val()),
+        (a.price = $("#price_" + e).html()),
+        gShoppingCarList.push(a),
+        (gIsBuy = !0),
+        UpdateUnboughtClass();
     }
   } else alert("請先登入");
 }
 function DeleteSelectedClass(e) {
-  for (var t = 0; t < gShoppingCarList.length; t++) gShoppingCarList[t].index == e && (gShoppingCarList.splice(t, 1), (t = -1));
+  for (var t = 0; t < gShoppingCarList.length; t++)
+    gShoppingCarList[t].index == e && (gShoppingCarList.splice(t, 1), (t = -1));
   UpdateUnboughtClass(), ShowShoppingCar();
 }
 function ConfirmShoppingCar() {
-  gIsBuy ? confirm("請再次確認購買的課程與時間長度") && CommitShopping() : HideAlertMenu();
+  gIsBuy
+    ? confirm("請再次確認購買的課程與時間長度") && CommitShopping()
+    : HideAlertMenu();
 }
 function CommitShopping() {
   if (gIsBuy) {
     for (var e = new Array(), t = 0; t < gShoppingCarList.length; t++) {
       var n = gClasses[gShoppingCarList[t].index],
         a = new Object();
-      (a.course_name = n.name), (a.course_id = n.id), (a.duration = gShoppingCarList[t].duration), (a.price = gShoppingCarList[t].price), e.push(a);
+      (a.course_name = n.name),
+        (a.course_id = n.id),
+        (a.duration = gShoppingCarList[t].duration),
+        (a.price = gShoppingCarList[t].price),
+        e.push(a);
     }
     SendCommand(CMD_BUY_CLASS, CreateJSONObject(CMD_BUY_CLASS, e));
   } else HideAlertMenu();
 }
 function ChangePrice(e) {
-  for (var t = $("#duration_" + e).val(), n = 0; n < gClasses[e].specs.length; n++) gClasses[e].specs[n].duration == t && $("#price_" + e).html(gClasses[e].specs[n].price);
+  for (
+    var t = $("#duration_" + e).val(), n = 0;
+    n < gClasses[e].specs.length;
+    n++
+  )
+    gClasses[e].specs[n].duration == t &&
+      $("#price_" + e).html(gClasses[e].specs[n].price);
 }
 function ShowAttach() {
   $("#attach_list").toggle();
@@ -531,32 +776,31 @@ function ShowNormalQuestionContent(e) {
   t.is(":hidden") ? t.slideDown() : t.slideUp();
 }
 function UpdateUnboughtClass() {
-  for (var e = 0; e < gClasses.length; e++) $("#class_status_" + e).html("加入購物車"), $("#duration_" + e).attr("disabled", !1);
-  for (e = 0; e < gShoppingCarList.length; e++) $("#class_status_" + gShoppingCarList[e].index).html("已放入"), $("#duration_" + gShoppingCarList[e].index).attr("disabled", !0);
+  for (var e = 0; e < gClasses.length; e++)
+    $("#class_status_" + e).html("加入購物車"),
+      $("#duration_" + e).attr("disabled", !1);
+  for (e = 0; e < gShoppingCarList.length; e++)
+    $("#class_status_" + gShoppingCarList[e].index).html("已放入"),
+      $("#duration_" + gShoppingCarList[e].index).attr("disabled", !0);
 }
 function UpdateTotalPrice() {
   if (0 != gShoppingCarList.length) {
-    for (var e = 0, t = 0; t < gShoppingCarList.length; t++) e += parseInt(gShoppingCarList[t].price);
+    for (var e = 0, t = 0; t < gShoppingCarList.length; t++)
+      e += parseInt(gShoppingCarList[t].price);
     $("#buy_error_text")
       .html("總計: " + e)
       .css("color", "#000");
   }
 }
-function ShowActivityDetatil(index) {
-  $(".act_content_detail").hide();
-  $(".act_content_block_btn").css({ background: "#FFF" });
-  $($(".act_content_block_btn")[index]).css({ background: "#2ea3f2" });
-  $("#act_detail_" + index).show();
-}
 function ShowLargeImage(detailIndex, imgIndex) {
   $(".largeImage_content").css({
-    background: gActivitys[detailIndex].imgs[imgIndex],
+    background: gActivitys[detailIndex].content.data.imgs[imgIndex],
   });
   $(".largeImage").show();
 }
-function CloseLargeImage(){
+function CloseLargeImage() {
   $(".largeImage").hide();
 }
-function CloseActivityDetail() {
-  $(".act_content_detail").hide();
+function CloseActivityDetail(index) {
+  $("#act_detail_" + index).html("").hide();
 }
