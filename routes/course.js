@@ -1,6 +1,18 @@
 var express = require("express");
 var router = express.Router();
 
+router.post("/api/event/index.php/event/create", function (req, res, next) {
+  var obj = new Object();
+  obj.status = "success";
+  res.send(obj);
+});
+
+router.post("/api/event/index.php/event/:id/update", function (req, res, next) {
+  var obj = new Object();
+  obj.status = "success";
+  res.send(obj);
+});
+
 router.post("/api/course/index.php/file/image/upload", function (req, res, next) {
   var obj = new Object();
   obj.status = "success";

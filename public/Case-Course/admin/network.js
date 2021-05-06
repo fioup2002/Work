@@ -41,7 +41,7 @@ function GetActivityDetail(index) {
         eventData.description = "";
         eventData.isActive = "1";
         eventData.startTime = Math.floor(date.getTime() / 1000);
-        eventData.endTime = Math.floor(date.getTime() / 1000);
+        eventData.endTime = Math.floor(date.getTime() / 1000 + 60 * 60 * 24);
         var data = new Object();
         data.link = "";
         data.mainImg = "";
@@ -80,6 +80,18 @@ function GetActivityDetail(index) {
       $("#activity_detail_" + index).remove();
     }
   } 
+}
+function SendCreateEvent(index){
+  console.log(gActivityList[index].content);
+  $.ajax({
+    url: "/api/event/index.php/event/create",
+    dataType: "json",
+    type: "post",
+    data: JSON.stringify(gActivityList[index].content),
+    success: function (res) {
+      console.log(res);
+    },
+  });
 }
 function CheckActicityData(index){
   var res = false;
