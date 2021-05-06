@@ -25,9 +25,8 @@ function GetAllActivity() {
       obj["event_id"] = -1;
       obj["name"] = "+";
       gActivityList.splice(0, 0, obj);
-      gOrigianlActivityList = res.eventList;
+      gOrigianlActivityList = $.parseJSON(JSON.stringify(res.eventList));
       gOrigianlActivityList.splice(0, 0, obj);
-      console.log(gActivityList);
       UpdateActivity();
     },
   });
@@ -36,12 +35,13 @@ function GetActivityDetail(index) {
   if($("#activity_detail_" + index).length == 0){
     if(gActivityList[index].content == undefined){
       if (index == 0) {
+        var date = new Date();
         var eventData = new Object();
         eventData.name = "";
         eventData.description = "";
         eventData.isActive = "1";
-        eventData.startTime = "";
-        eventData.endTime = "";
+        eventData.startTime = Math.floor(date.getTime() / 1000);
+        eventData.endTime = Math.floor(date.getTime() / 1000);
         var data = new Object();
         data.link = "";
         data.mainImg = "";
