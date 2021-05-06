@@ -1270,25 +1270,25 @@ function GenerateActivityDetail(index) {
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("名字:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='text' id='activity_detail_name_" + index + "' class='activity_detail_line_input' value='" + gActivityList[index].content.name + "'></input>";
+  res += "<input type='text' id='activity_detail_name_" + index + "' class='activity_detail_line_input' value='" + gActivityList[index].content.name + '\' onchange=\'ChangeDetailValue("activity_detail_name_","' + index + "\")'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("描述:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='text' id='activity_detail_description_" + index + "' class='activity_detail_line_input' value='" + gActivityList[index].content.description + "'></input>";
+  res += "<input type='text' id='activity_detail_description_" + index + "' class='activity_detail_line_input' value='" + gActivityList[index].content.description + '\' onchange=\'ChangeDetailValue("activity_detail_description_","' + index + "\")'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("開始時間:", "font-size: 20px;");
   res += "</div>";
-  res += "<input onkeydown='return false' type='date' id='activity_detail_startTime_" + index + "' class='activity_detail_line_input' value='" + ChangeTimestampToDate(gActivityList[index].content.startTime) + "'></input>";
+  res += "<input onkeydown='return false' type='date' id='activity_detail_startTime_" + index + "' class='activity_detail_line_input' value='" + ChangeTimestampToDate(gActivityList[index].content.startTime) + '\' onchange=\'ChangeDetailValue("activity_detail_startTime_","' + index + "\")'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("結束時間:", "font-size: 20px;");
   res += "</div>";
-  res += "<input onkeydown='return false' type='date' id='activity_detail_endTime_" + index + "' class='activity_detail_line_input'  value='" + ChangeTimestampToDate(gActivityList[index].content.endTime) + "'></input>";
+  res += "<input onkeydown='return false' type='date' id='activity_detail_endTime_" + index + "' class='activity_detail_line_input'  value='" + ChangeTimestampToDate(gActivityList[index].content.endTime) + '\' onchange=\'ChangeDetailValue("activity_detail_endTime_","' + index + "\")'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
@@ -1300,7 +1300,7 @@ function GenerateActivityDetail(index) {
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("連結:", "font-size: 20px;");
   res += "</div>";
-  res += "<input type='text' id='activity_detail_link_" + index + "' class='activity_detail_line_input' value='" + gActivityList[index].content.data.link + "'></input>";
+  res += "<input type='text' id='activity_detail_link_" + index + "' class='activity_detail_line_input' value='" + gActivityList[index].content.data.link + '\' onchange=\'ChangeDetailValue("activity_detail_link_","' + index + "\")'></input>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
@@ -1414,37 +1414,38 @@ function ChangeTimestampToDate(timestamp) {
 }
 function CreateEvent(index) {
   var isValid = true;
-  if (CheckDetailValue("activity_detail_name_" + index)) {
+  if (gActivityList[index].content.name.length == 0) {
     alert("請輸入名字");
     isValid = false;
-  } else {
-    gActivityList[index].content.name = $("#activity_detail_name_" + index).val();
   }
-  var startTime = (new Date($("#activity_detail_startTime_" + index).val())).getTime() / 1000;
-  var endTime =  (new Date($("#activity_detail_endTime_" + index).val())).getTime() / 1000;
-  if(endTime - startTime == 0){
+  if (gActivityList[index].content.endTime - gActivityList[index].content.startTime <= 0) {
     alert("時間錯誤");
     isValid = false;
   }
   if (isValid) {
-    gActivityList[index].content.description = $("#activity_detail_description_" + index).val();
-    gActivityList[index].content.startTime = startTime;
-    gActivityList[index].content.endTime = endTime;
-    gActivityList[index].content.link = $("#activity_detail_link_" + index).val();
     RemoveDetailDefaultValue(index);
     SendCreateEvent(index);
   }
 }
-function CheckDetailValue(id) {
-  var res = false;
-  var val = $("#" + id).val();
-  if (val.length == 0) {
-    res = true;
+function RemoveDetailDefaultValue(index) {
+  if (gActivityList[index].content.data.imgs[0] == "") {
+    gActivityList[index].content.data.imgs.splice(0, 1);
   }
-  return res;
 }
-function RemoveDetailDefaultValue(index){
-  if(gActivityList[index].content.data.imgs[0] == ""){
-    gActivityList[index].content.data.imgs.splice(0,1);
+function ChangeDetailValue(id, index) {
+  if (id == "activity_detail_name_") {
+    gActivityList[index].content.name = $("#" + id + index).val();
+  }
+  if (id == "activity_detail_description_") {
+    gActivityList[index].content.description = $("#" + id + index).val();
+  }
+  if (id == "activity_detail_startTime_") {
+    gActivityList[index].content.startTime = new Date($("#" + id + index).val()).getTime() / 1000;
+  }
+  if (id == "activity_detail_endTime_") {
+    gActivityList[index].content.endTime = new Date($("#" + id + index).val()).getTime() / 1000;
+  }
+  if (id == "activity_detail_link_") {
+    gActivityList[index].content.data.link = $("#" + id + index).val();
   }
 }

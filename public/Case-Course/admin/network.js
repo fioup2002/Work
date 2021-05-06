@@ -32,8 +32,8 @@ function GetAllActivity() {
   });
 }
 function GetActivityDetail(index) {
-  if($("#activity_detail_" + index).length == 0){
-    if(gActivityList[index].content == undefined){
+  if ($("#activity_detail_" + index).length == 0) {
+    if (gActivityList[index].content == undefined) {
       if (index == 0) {
         var date = new Date();
         var eventData = new Object();
@@ -49,7 +49,7 @@ function GetActivityDetail(index) {
         data.imgs.push("");
         eventData.data = data;
         gActivityList[index].content = eventData;
-        gOrigianlActivityList[index].content = eventData;
+        gOrigianlActivityList[index].content = $.parseJSON(JSON.stringify(eventData));
         UpdateActivityDetail(index);
       } else {
         $.ajax({
@@ -59,29 +59,30 @@ function GetActivityDetail(index) {
           data: "",
           success: function (res) {
             gActivityList[index].content = res.eventData;
-            gOrigianlActivityList[index].content = res.eventData;
+            gOrigianlActivityList[index].content = $.parseJSON(JSON.stringify(res.eventData));
             UpdateActivityDetail(index);
           },
         });
       }
-    }
-    else{
+    } else {
       UpdateActivityDetail(index);
     }
-  }
-  else{
-    if(CheckActicityData(index)){
-      console.log("有修改");
-      if(confirm("已修改過資料，請問是否儲存?")){
+  } else {
+    if (CheckActicityData(index)) {
+      if (confirm("已修改過資料，請問是否儲存?")) {
+        gOrigianlActivityList[index].content = $.parseJSON(JSON.stringify(gActivityList[index].content));
+        $("#activity_detail_" + index).remove();
+      } else {
+        gActivityList[index].content = $.parseJSON(JSON.stringify(gOrigianlActivityList[index].content));
         $("#activity_detail_" + index).remove();
       }
-    }
-    else{
+    } else {
+      gActivityList[index].content = $.parseJSON(JSON.stringify(gOrigianlActivityList[index].content));
       $("#activity_detail_" + index).remove();
     }
-  } 
+  }
 }
-function SendCreateEvent(index){
+function SendCreateEvent(index) {
   console.log(gActivityList[index].content);
   $.ajax({
     url: "/api/event/index.php/event/create",
@@ -93,12 +94,12 @@ function SendCreateEvent(index){
     },
   });
 }
-function CheckActicityData(index){
+function CheckActicityData(index) {
   var res = false;
-  var now = gActivityList[index].content;
-  var before = gOrigianlActivityList[index].content;
-  if(now.name != before.name){
-    res = true
+  var now = JSON.stringify(gActivityList[index].content);
+  var before = JSON.stringify(gOrigianlActivityList[index].content);
+  if (now != before) {
+    res = true;
   }
   return res;
 }
@@ -166,10 +167,7 @@ function GetAllClass() {
       // t.courseList.push(class_obj);
       // }
       /*test*/
-      CheckStatus(t, e),
-        (0 != (gAllClasses = t.courseList).length && 0 == gAllClasses[0].id.length) || gAllClasses.splice(0, 0, DefaultClass()),
-        (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses))),
-        1 == gPageIndex && UpdateAllClass();
+      CheckStatus(t, e), (0 != (gAllClasses = t.courseList).length && 0 == gAllClasses[0].id.length) || gAllClasses.splice(0, 0, DefaultClass()), (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses))), 1 == gPageIndex && UpdateAllClass();
     },
     dataType: "json",
     data: "",
@@ -192,8 +190,7 @@ function GetClassContent(a) {
         t = s.responseText;
       }
       CheckStatus(t, r);
-      for (var e = 0; e < gAllClasses.length; e++)
-        gAllClasses[e].id == a && ((gAllClasses[e].attachFiles = t.courseData.attachFiles), (gAllClasses[e].chapters = t.courseData.chapters), (gAllClasses[e].isFree = t.courseData.isFree));
+      for (var e = 0; e < gAllClasses.length; e++) gAllClasses[e].id == a && ((gAllClasses[e].attachFiles = t.courseData.attachFiles), (gAllClasses[e].chapters = t.courseData.chapters), (gAllClasses[e].isFree = t.courseData.isFree));
       (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses))), UpdateAllClassContent(a);
     },
     dataType: "json",
@@ -348,7 +345,7 @@ function SetNewClass(e) {
     },
   });
 }
-function UploadImage(e, s, o , type, subIndex) {
+function UploadImage(e, s, o, type, subIndex) {
   var c = gServerAPI + "/course/index.php/file/image/upload",
     t = new FormData();
   t.append("img_pos", e),
@@ -365,13 +362,11 @@ function UploadImage(e, s, o , type, subIndex) {
         }
         if ((CheckStatus(t, c), "success" == t.status)) {
           if (PAGE_MENUS[gPageIndex] == "外拍活動管理") {
-            if(type == "activity_detail_subImage_add"){
+            if (type == "activity_detail_subImage_add") {
               gActivityList[o].content.data.imgs.push(t.path);
-            }
-            else if(type == "activity_detail_mainImage_change"){
+            } else if (type == "activity_detail_mainImage_change") {
               gActivityList[o].content.data.mainImg = t.path;
-            }
-            else if(type == "activity_detail_subImage_change"){
+            } else if (type == "activity_detail_subImage_change") {
               gActivityList[o].content.data.imgs[subIndex] = t.path;
             }
             UpdateActivityDetail(o);
