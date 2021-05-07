@@ -167,7 +167,10 @@ function GetAllClass() {
       // t.courseList.push(class_obj);
       // }
       /*test*/
-      CheckStatus(t, e), (0 != (gAllClasses = t.courseList).length && 0 == gAllClasses[0].id.length) || gAllClasses.splice(0, 0, DefaultClass()), (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses))), 1 == gPageIndex && UpdateAllClass();
+      CheckStatus(t, e),
+        (0 != (gAllClasses = t.courseList).length && 0 == gAllClasses[0].id.length) || gAllClasses.splice(0, 0, DefaultClass()),
+        (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses))),
+        1 == gPageIndex && UpdateAllClass();
     },
     dataType: "json",
     data: "",
@@ -190,7 +193,8 @@ function GetClassContent(a) {
         t = s.responseText;
       }
       CheckStatus(t, r);
-      for (var e = 0; e < gAllClasses.length; e++) gAllClasses[e].id == a && ((gAllClasses[e].attachFiles = t.courseData.attachFiles), (gAllClasses[e].chapters = t.courseData.chapters), (gAllClasses[e].isFree = t.courseData.isFree));
+      for (var e = 0; e < gAllClasses.length; e++)
+        gAllClasses[e].id == a && ((gAllClasses[e].attachFiles = t.courseData.attachFiles), (gAllClasses[e].chapters = t.courseData.chapters), (gAllClasses[e].isFree = t.courseData.isFree));
       (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses))), UpdateAllClassContent(a);
     },
     dataType: "json",
