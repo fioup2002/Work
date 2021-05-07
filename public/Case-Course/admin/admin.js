@@ -1642,7 +1642,7 @@ function GenerateActivityDetail(index) {
     res += GenerateNormalString("新增", "font-size: 20px;");
     res += "</div>";
   } else {
-    res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);'>";
+    res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);' onClick='ModifyEvent(" + index + ");'>";
     res += GenerateNormalString("修改", "font-size: 20px;");
     res += "</div>";
     res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);'>";
@@ -1691,16 +1691,7 @@ function ChangeTimestampToDate(timestamp) {
   return new Date(timestamp * 1000).toISOString().split("T")[0];
 }
 function CreateEvent(index) {
-  var isValid = true;
-  if (gActivityList[index].content.name.length == 0) {
-    alert("請輸入名字");
-    isValid = false;
-  }
-  if (gActivityList[index].content.endTime - gActivityList[index].content.startTime <= 0) {
-    alert("時間錯誤");
-    isValid = false;
-  }
-  if (isValid) {
+  if (CheckEvent(index)) {
     RemoveDetailDefaultValue(index);
     SendCreateEvent(index);
   }
@@ -1725,5 +1716,28 @@ function ChangeDetailValue(id, index) {
   }
   if (id == "activity_detail_link_") {
     gActivityList[index].content.data.link = $("#" + id + index).val();
+  }
+}
+function CheckEvent(index){
+  var isValid = true;
+  if (gActivityList[index].content.name.length == 0) {
+    alert("請輸入名字");
+    isValid = false;
+  }
+  if (gActivityList[index].content.endTime - gActivityList[index].content.startTime <= 0) {
+    alert("時間錯誤");
+    isValid = false;
+  }
+  return isValid;
+}
+function ModifyEvent(index){
+  var isValid = true;
+  if (gActivityList[index].content.name.length == 0) {
+    alert("請輸入名字");
+    isValid = false;
+  }
+  if (gActivityList[index].content.endTime - gActivityList[index].content.startTime <= 0) {
+    alert("時間錯誤");
+    isValid = false;
   }
 }
