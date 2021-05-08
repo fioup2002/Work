@@ -59,7 +59,9 @@ function GetActivityDetail(index) {
           data: "",
           success: function (res) {
             gActivityList[index].content = res.eventData;
+            gActivityList[index].content.data.imgs.splice(0,0,"");
             gOrigianlActivityList[index].content = $.parseJSON(JSON.stringify(res.eventData));
+            gOrigianlActivityList[index].content.data.imgs.splice(0,0,"");
             UpdateActivityDetail(index);
           },
         });
@@ -90,7 +92,8 @@ function SendCreateEvent(index) {
     type: "post",
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
-      console.log("resp: "+res);
+      console.log("resp: ");
+      console.log(res);
       GetAllActivity();
     },
   });
@@ -104,6 +107,7 @@ function SendUpdateEvent(index) {
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
       console.log("resp: "+res);
+      console.log(res);
       GetAllActivity();
     },
   });
