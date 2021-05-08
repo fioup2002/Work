@@ -1642,13 +1642,13 @@ function GenerateActivityDetail(index) {
     res += GenerateNormalString("新增", "font-size: 20px;");
     res += "</div>";
   } else {
-    res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);' onClick='ModifyEvent(" + index + ");'>";
+    res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);' onClick='UpdateEvent(" + index + ", \"modify\");'>";
     res += GenerateNormalString("修改", "font-size: 20px;");
     res += "</div>";
-    res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);'>";
+    res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);' onClick='UpdateEvent(" + index + ", \"activate\");'>";
     res += GenerateNormalString("啟用", "font-size: 20px;");
     res += "</div>";
-    res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);'>";
+    res += "<div class='activity_detail_bottom_button' style='margin-left:calc((100% - 200px * 3) / 4);' onClick='UpdateEvent(" + index + ", \"remove\");'>";
     res += GenerateNormalString("停用", "font-size: 20px;");
     res += "</div>";
   }
@@ -1730,14 +1730,10 @@ function CheckEvent(index){
   }
   return isValid;
 }
-function ModifyEvent(index){
-  var isValid = true;
-  if (gActivityList[index].content.name.length == 0) {
-    alert("請輸入名字");
-    isValid = false;
-  }
-  if (gActivityList[index].content.endTime - gActivityList[index].content.startTime <= 0) {
-    alert("時間錯誤");
-    isValid = false;
+function UpdateEvent(index, action){
+  if (CheckEvent(index)){
+    RemoveDetailDefaultValue(index);
+    gActivityList[index].content.action = action;
+    SendUpdateEvent(index)
   }
 }

@@ -90,7 +90,21 @@ function SendCreateEvent(index) {
     type: "post",
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
-      console.log(res);
+      console.log("resp: "+res);
+      GetAllActivity();
+    },
+  });
+}
+function SendUpdateEvent(index) {
+  console.log(gActivityList[index].content);
+  $.ajax({
+    url: "/api/event/index.php/event/"+ gActivityList[index].event_id +"/update",
+    dataType: "json",
+    type: "post",
+    data: JSON.stringify(gActivityList[index].content),
+    success: function (res) {
+      console.log("resp: "+res);
+      GetAllActivity();
     },
   });
 }
