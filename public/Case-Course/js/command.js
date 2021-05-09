@@ -179,6 +179,7 @@ function ParseReponse(e, s, t) {
           index = i;
         }
       }
+      $("#act_detail_" + index).html("");
       $("#act_detail_" + index)
         .append(GenerateActivityDetail(index))
         .show();
