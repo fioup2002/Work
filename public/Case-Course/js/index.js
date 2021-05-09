@@ -111,7 +111,7 @@ function GenerateActivityDetail(index) {
   result += GenerateNormalString("X", "text-align: center; font-size: x-large; font-weight: bold", "");
   result += "</div>";
   result += "</div>";
-  result += "<img class='act_content_detail_img' style='background: url(" + gActivitys[index].main_img + ")' >";
+  result += "<img class='act_content_detail_img' style='background: url(" + gActivitys[index].main_img + ") no-repeat center; background-size: contain;' >";
   result += "</img>";
   result += "<div class='act_content_detail_imgs'>";
   console.log(gActivitys[index].content);
