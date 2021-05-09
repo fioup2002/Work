@@ -44,7 +44,7 @@ function SendCommand(e, s) {
     SendAJAX(CMD_GET_ACTIVITY, "", "/api/event/index.php/event/list", r, "GET", n);
     return;
   } else if (e == CMD_GET_ACTIVITY_DETAIL) {
-    SendAJAX(CMD_GET_ACTIVITY_DETAIL, s, "/api/event/index.php/event/" + s + "/content/", r, "GET", "");
+    SendAJAX(CMD_GET_ACTIVITY_DETAIL, s, "/api/event/index.php/event/" + s + "/content", r, "GET", "");
     return;
   }
   e == CMD_GET_CLASS

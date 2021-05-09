@@ -53,7 +53,7 @@ function GetActivityDetail(index) {
         UpdateActivityDetail(index);
       } else {
         $.ajax({
-          url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content/",
+          url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content",
           dataType: "json",
           type: "get",
           data: "",
