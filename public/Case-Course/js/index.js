@@ -111,13 +111,13 @@ function GenerateActivityDetail(index) {
   result += GenerateNormalString("X", "text-align: center; font-size: x-large; font-weight: bold", "");
   result += "</div>";
   result += "</div>";
-  result += "<img class='act_content_detail_img' style='background:" + gActivitys[index].mainImg + "' >";
+  result += "<img class='act_content_detail_img' style='background: url(" + gActivitys[index].main_img + ")' >";
   result += "</img>";
   result += "<div class='act_content_detail_imgs'>";
   console.log(gActivitys[index].content);
   for (var j = 0; j < gActivitys[index].content.data.imgs.length; j++) {
     var img = gActivitys[index].content.data.imgs[j];
-    result += "<img class='act_content_detail_imgs_icon' style='background:" + img + "' onclick='ShowLargeImage(" + index + " ," + j + ")'>";
+    result += "<img class='act_content_detail_imgs_icon' style='background: url(" + img + ")' onclick='ShowLargeImage(" + index + " ," + j + ")'>";
     result += "</img>";
   }
   result += "</div>";
