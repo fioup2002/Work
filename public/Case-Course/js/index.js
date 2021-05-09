@@ -117,7 +117,7 @@ function GenerateActivityDetail(index) {
   console.log(gActivitys[index].content);
   for (var j = 0; j < gActivitys[index].content.data.imgs.length; j++) {
     var img = gActivitys[index].content.data.imgs[j];
-    result += "<img class='act_content_detail_imgs_icon' style='background: url(" + img + ")' onclick='ShowLargeImage(" + index + " ," + j + ")'>";
+    result += "<img class='act_content_detail_imgs_icon' style='background: url(" + img + ") no-repeat center; background-size:100% 100%' onclick='ShowLargeImage(" + index + " ," + j + ")'>";
     result += "</img>";
   }
   result += "</div>";
@@ -542,7 +542,8 @@ function UpdateTotalPrice() {
 }
 function ShowLargeImage(detailIndex, imgIndex) {
   $(".largeImage_content").css({
-    background: gActivitys[detailIndex].content.data.imgs[imgIndex],
+    'background': 'url('+gActivitys[detailIndex].content.data.imgs[imgIndex]+')',
+    'background-size': 'contain',
   });
   $(".largeImage").show();
 }

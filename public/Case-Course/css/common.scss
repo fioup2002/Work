@@ -41,7 +41,6 @@
         box-sizing: border-box;
         border-radius: 5px;
         margin: auto;
-        margin-top: calc(100% - 20px - 225px - 50px - 50px - 20px * 2);
         cursor: pointer;
       }
     }
@@ -130,7 +129,6 @@
   &_content {
     position: absolute;
     width: 1200px;
-    height: calc(1200px / 4 * 3);
     left: calc((100% - 1200px) / 2);
     top: calc((100% - (1200px / 4 * 3)) / 2);
     display: block;
