@@ -68,7 +68,7 @@ function GenerateActivity() {
     var obj = gActivitys[i];
     if (obj.is_active == 1) {
       result += "<div class='act_content_block'>";
-      result += "<img class='act_content_block_img' style='background: " + obj.mainImg + "'>";
+      result += "<img class='act_content_block_img' style='background: url(" + obj.main_img + ")'>";
       result += "</img>";
       result += "<div class='act_content_block_title'>";
       result += GenerateNormalString(obj.name, "", "");
