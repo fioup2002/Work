@@ -542,7 +542,6 @@ function UpdateTotalPrice() {
 }
 function ShowLargeImage(detailIndex, imgIndex) {
   var style = "background: url('" + gActivitys[detailIndex].content.data.imgs[imgIndex] + "') no-repeat center; background-size: contain;";
-  console.log(style)
   $(".largeImage_content").attr("style", style);
   $(".largeImage").show();
 }

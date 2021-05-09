@@ -34,7 +34,7 @@ router.get("/api/event/index.php/event/:id/content/", function (req, res, next) 
   data.link = "http://link";
   data.mainImg = "./123.jpg";
   data.imgs = new Array();
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < 8; i++) {
     data.imgs.push("./" + i + ".jpg");
   }
   eventData.data = data;
