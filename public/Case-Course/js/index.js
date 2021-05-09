@@ -73,7 +73,7 @@ function GenerateActivity() {
       result += "<div class='act_content_block_title'>";
       result += GenerateNormalString(obj.name, "", "");
       result += "</div>";
-      result += "<div id='id='act_btn_" + i + "'' class='act_content_block_btn' onclick='SendCommand(\"" + CMD_GET_ACtiVITY_DETAIL + '", "' + obj.event_id + "\")'>";
+      result += "<div id='id='act_btn_" + i + "'' class='act_content_block_btn' onclick='SendCommand(\"" + CMD_GET_ACTIVITY_DETAIL + '", "' + obj.event_id + "\")'>";
       result += GenerateNormalString("查看詳情", "text-align: center", "");
       result += "</div>";
       result += "</div>";
@@ -114,6 +114,7 @@ function GenerateActivityDetail(index) {
   result += "<img class='act_content_detail_img' style='background:" + gActivitys[index].mainImg + "' >";
   result += "</img>";
   result += "<div class='act_content_detail_imgs'>";
+  console.log(gActivitys[index].content);
   for (var j = 0; j < gActivitys[index].content.data.imgs.length; j++) {
     var img = gActivitys[index].content.data.imgs[j];
     result += "<img class='act_content_detail_imgs_icon' style='background:" + img + "' onclick='ShowLargeImage(" + index + " ," + j + ")'>";

@@ -50,6 +50,7 @@ router.get("/api/event/index.php/event/list", function (req, res, next) {
     var event = new Object();
     event["event_id"] = "event_ID_" + i;
     event["name"] = "event_name_" + i;
+    event["is_active"] = 1;
     obj.eventList.push(event);
   }
   res.send(obj);

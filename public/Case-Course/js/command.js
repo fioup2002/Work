@@ -43,8 +43,8 @@ function SendCommand(e, s) {
   if (e == CMD_GET_ACTIVITY) {
     SendAJAX(CMD_GET_ACTIVITY, "", "/api/event/index.php/event/list", r, "GET", n);
     return;
-  } else if (e == CMD_GET_ACtiVITY_DETAIL) {
-    SendAJAX(CMD_GET_ACtiVITY_DETAIL, s, "/api/event/index.php/event/" + s + "/content/", r, "GET", n);
+  } else if (e == CMD_GET_ACTIVITY_DETAIL) {
+    SendAJAX(CMD_GET_ACTIVITY_DETAIL, s, "/api/event/index.php/event/" + s + "/content/", r, "GET", "");
     return;
   }
   e == CMD_GET_CLASS
@@ -79,6 +79,10 @@ function SendCommand(e, s) {
     SendAJAX(e, s, t, r, a, n);
 }
 function SendAJAX(s, t, e, r, a, n) {
+  var data = n + t;
+  if (s == CMD_GET_ACTIVITY_DETAIL) {
+    data = "";
+  }
   $.ajax({
     type: a,
     url: e,
@@ -86,7 +90,7 @@ function SendAJAX(s, t, e, r, a, n) {
       ParseReponse(s, t, e);
     },
     dataType: "json",
-    data: n + t,
+    data: data,
     headers: {
       "Content-Type": "application/json",
       "access-token": r,
@@ -166,7 +170,7 @@ function ParseReponse(e, s, t) {
       gActivitys = r.eventList;
       $($(".pragrah_title")[0]).after(GenerateActivity());
     }
-  } else if (e == CMD_GET_ACtiVITY_DETAIL) {
+  } else if (e == CMD_GET_ACTIVITY_DETAIL) {
     if (r.status == "success") {
       var index = 0;
       for (var i = 0; i < gActivitys.length; i++) {
