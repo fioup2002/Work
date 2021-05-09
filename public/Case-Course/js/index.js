@@ -541,10 +541,8 @@ function UpdateTotalPrice() {
   }
 }
 function ShowLargeImage(detailIndex, imgIndex) {
-  $(".largeImage_content").css({
-    'background': 'url('+gActivitys[detailIndex].content.data.imgs[imgIndex]+')',
-    'background-size': 'contain',
-  });
+  var style = "background: url('" + gActivitys[detailIndex].content.data.imgs[imgIndex] + "') no-repeat center; background-size: contain;";
+  $(".largeImage_content").attr("style", style);
   $(".largeImage").show();
 }
 function CloseLargeImage() {
