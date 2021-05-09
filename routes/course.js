@@ -42,7 +42,7 @@ router.get("/api/event/index.php/event/:id/content/", function (req, res, next) 
   res.send(obj);
 });
 
-router.get("/event/list", function (req, res, next) {
+router.get("/api/event/index.php/event/list", function (req, res, next) {
   var obj = new Object();
   obj.status = "success";
   obj.eventList = new Array();

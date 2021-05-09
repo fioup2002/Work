@@ -15,7 +15,7 @@ var gActivityList = new Array();
 var gOrigianlActivityList = new Array();
 function GetAllActivity() {
   $.ajax({
-    url: "/event/list",
+    url: "/api/event/index.php/event/list",
     dataType: "json",
     type: "get",
     data: "",
