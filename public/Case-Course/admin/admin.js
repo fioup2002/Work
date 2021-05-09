@@ -1519,16 +1519,16 @@ function GenerateActivityDetail(index) {
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
-  res += GenerateNormalString("描述:", "font-size: 20px;");
+  res += GenerateNormalString("活動內容:", "font-size: 20px;");
   res += "</div>";
   res +=
-    "<input type='text' id='activity_detail_description_" +
+    "<textarea type='text' id='activity_detail_description_" +
     index +
     "' class='activity_detail_line_input' value='" +
     gActivityList[index].content.description +
-    '\' onchange=\'ChangeDetailValue("activity_detail_description_","' +
+    '\' onkeyup=\'ChangeDetailValue("activity_detail_description_","' +
     index +
-    "\")'></input>";
+    "\")'></textarea>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
@@ -1554,18 +1554,15 @@ function GenerateActivityDetail(index) {
     ChangeTimestampToDate(gActivityList[index].content.endTime) +
     '\' onchange=\'ChangeDetailValue("activity_detail_endTime_","' +
     index +
-    "\")'></input>";
+    "\")'></textarea>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
   res += GenerateNormalString("啟動:", "font-size: 20px;");
   res += "</div>";
-  res +=
-    "<input type='checkbox' id='activity_detail_active_" +
-    index +
-    "' class='activity_detail_line_input' " +
-    (gActivityList[index].content.isActive == 1 ? "checked" : "") +
-    " style='width: 50px;margin-left:10px' disabled></input>";
+  res += "<div class='activity_detail_line_input'>";
+  res += gActivityList[index].content.isActive == 1 ? GenerateNormalString("啟用中", "font-size: 20px;text-align:left") : GenerateNormalString("已關閉", "font-size: 20px;text-align:left");
+  res += "</div>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
@@ -1727,7 +1724,7 @@ function ChangeDetailValue(id, index) {
     gActivityList[index].content.name = $("#" + id + index).val();
   }
   if (id == "activity_detail_description_") {
-    gActivityList[index].content.description = $("#" + id + index).val();
+    gActivityList[index].content.description = ($("#" + id + index).val()).replace(/\n/g,"<br>");
   }
   if (id == "activity_detail_startTime_") {
     gActivityList[index].content.startTime = new Date($("#" + id + index).val()).getTime() / 1000;

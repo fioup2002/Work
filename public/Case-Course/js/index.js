@@ -114,7 +114,6 @@ function GenerateActivityDetail(index) {
   result += "<img class='act_content_detail_img' style='background: url(" + gActivitys[index].main_img + ") no-repeat center; background-size: contain;' >";
   result += "</img>";
   result += "<div class='act_content_detail_imgs'>";
-  console.log(gActivitys[index].content);
   for (var j = 0; j < gActivitys[index].content.data.imgs.length; j++) {
     var img = gActivitys[index].content.data.imgs[j];
     result += "<img class='act_content_detail_imgs_icon' style='background: url(" + img + ") no-repeat center; background-size:100% 100%' onclick='ShowLargeImage(" + index + " ," + j + ")'>";
@@ -122,7 +121,7 @@ function GenerateActivityDetail(index) {
   }
   result += "</div>";
   result += "<div class='act_content_detail_text'>";
-  result += GenerateNormalString(gActivitys[index].content.description, "", "");
+  result += GenerateNormalString(gActivitys[index].content.description.replace(/\n/g,"<br>"), "", "");
   result += "</div>";
   result += "<a class='act_content_detail_btn' href='" + gActivitys[index].content.data.link + "' target='_blank'>";
   result += GenerateNormalString("我要報名", "text-align: center;", "");
