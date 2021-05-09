@@ -63,14 +63,10 @@ function GenerateActivity() {
   var result = "";
   result += "<div class='act'>";
   result += "<div class='act_content'>";
-  if (gActivitys.length == 0) {
-    result += "<div class='act_content_no'>";
-    result += GenerateTitleString("目前並無新活動", "font-size: 20px;text-align:center;");
-    result += "</div>";
-  }
+  var isNeedShowText = true;
   for (var i = 0; i < gActivitys.length; i++) {
     var obj = gActivitys[i];
-    if (obj.isActive == 1) {
+    if (obj.is_active == 1) {
       result += "<div class='act_content_block'>";
       result += "<img class='act_content_block_img' style='background: " + obj.mainImg + "'>";
       result += "</img>";
@@ -83,7 +79,13 @@ function GenerateActivity() {
       result += "</div>";
       result += "<div class='act_content_detail' id='act_detail_" + i + "'>";
       result += "</div>";
+      isNeedShowText = false;
     }
+  }
+  if (isNeedShowText) {
+    result += "<div class='act_content_no'>";
+    result += GenerateTitleString("目前並無新活動", "font-size: 20px;text-align:center;");
+    result += "</div>";
   }
   result += "</div>";
   result += "</div>";
