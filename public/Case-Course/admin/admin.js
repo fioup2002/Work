@@ -1506,7 +1506,7 @@ function GenerateActivityDetail(index) {
   res += "<div class='activity_detail' id='activity_detail_" + index + "'>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
-  res += GenerateNormalString("名字:", "font-size: 20px;");
+  res += GenerateNormalString("活動名稱:", "font-size: 20px;");
   res += "</div>";
   res +=
     "<input type='text' id='activity_detail_name_" +

@@ -93,7 +93,7 @@ function SendCreateEvent(index) {
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
       if(res.status != "success"){
-        alert("Error")
+        alert("活動名稱或活動描述包含非法字元，請重新檢查")
       }
       GetAllActivity();
     },
@@ -108,7 +108,7 @@ function SendUpdateEvent(index) {
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
       if(res.status != "success"){
-        alert("Error")
+        alert("活動名稱或活動描述包含非法字元，請重新檢查")
       }
       GetAllActivity();
     },
