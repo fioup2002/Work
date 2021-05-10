@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="charset=UTF-8" />
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/style.min.css" />
+    <script src="js/lib/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="js/lib/vue.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="main">
+      <div class="header">
+        <div class='header_title' :style='GetHeaderTextWidth()' v-html="GenerateText(index.title)"></div>
+        <a v-if='obj.isNeedShow' class='header_item' v-for="obj in header" v-html="GenerateText(obj.text)" :href="obj.href"></a>
+      </div>
+    </div>
+    <script>
+      var gPage = "index";
+    </script>
+    <script src="js/data.js" type="text/javascript"></script>
+    <script src="js/network.js" type="text/javascript"></script>
+    <script src="js/main.js" type="text/javascript"></script>
+  </body>
+</html>

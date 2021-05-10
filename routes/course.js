@@ -1,6 +1,15 @@
 var express = require("express");
 var router = express.Router();
 
+var request = require('request');
+router.get(/debug/, function(req,res,next) {
+  var obj = new Object();
+  obj.status = "success";
+  res.send(obj);
+  // var newurl = 'https://www.teacher-ju.net/';
+  // request(newurl).pipe(res);
+});
+
 router.post("/api/event/index.php/event/create", function (req, res, next) {
   var obj = new Object();
   obj.status = "success";
