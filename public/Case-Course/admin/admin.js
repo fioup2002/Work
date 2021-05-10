@@ -1522,7 +1522,7 @@ function GenerateActivityDetail(index) {
   res += GenerateNormalString("活動內容:", "font-size: 20px;");
   res += "</div>";
   res += "<textarea type='text' id='activity_detail_description_" + index + "' class='activity_detail_line_input' onkeyup='ChangeDetailValue(\"activity_detail_description_\",\"" + index + "\")'>";
-  res += gActivityList[index].content.description.replace(/<br>/g,"\n");
+  res += gActivityList[index].content.description.replace(/<br>/g, "\n");
   res += "</textarea>";
   res += "</div>";
   res += "<div class='activity_detail_line'>";
@@ -1697,7 +1697,7 @@ function BackwardActivitySubImage(index, subIndex) {
   UpdateActivityDetail(index);
 }
 function DeleteActivitySubImage(index, subIndex) {
-  if(confirm("確認要刪除圖片嗎?")){
+  if (confirm("確認要刪除圖片嗎?")) {
     gActivityList[index].content.data.imgs.splice(subIndex, 1);
     UpdateActivityDetail(index);
   }
@@ -1721,9 +1721,7 @@ function ChangeDetailValue(id, index) {
     gActivityList[index].content.name = $("#" + id + index).val();
   }
   if (id == "activity_detail_description_") {
-    gActivityList[index].content.description = $("#" + id + index)
-      .val()
-      .replace(/\n/g, "<br>");
+    gActivityList[index].content.description = $("#" + id + index).val();
   }
   if (id == "activity_detail_startTime_") {
     gActivityList[index].content.startTime = new Date($("#" + id + index).val()).getTime() / 1000;

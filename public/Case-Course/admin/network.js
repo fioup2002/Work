@@ -92,8 +92,9 @@ function SendCreateEvent(index) {
     type: "post",
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
-      console.log("resp: ");
-      console.log(res);
+      if(res.status != "success"){
+        alert("Error")
+      }
       GetAllActivity();
     },
   });
@@ -106,8 +107,9 @@ function SendUpdateEvent(index) {
     type: "post",
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
-      console.log("resp: " + res);
-      console.log(res);
+      if(res.status != "success"){
+        alert("Error")
+      }
       GetAllActivity();
     },
   });

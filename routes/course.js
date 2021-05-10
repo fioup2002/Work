@@ -26,7 +26,7 @@ router.get("/api/event/index.php/event/:id/content/", function (req, res, next) 
   obj.status = "success";
   var eventData = new Object();
   eventData.name = "event_name";
-  eventData.description = "123456<br>4897<br>789<br>123";
+  eventData.description = "123456\n4897\n789\n123";
   eventData.isActive = "1";
   eventData.startTime = "1617595691";
   eventData.endTime = "1618027691";
