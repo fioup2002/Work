@@ -150,14 +150,12 @@ function GenerateRealClassCheckbox(e) {
 }
 function GenerateClassDetail(e) {
   var t = "";
-  // console.log(e.id,e.isFree);
-  // console.log(e);
   if (e.isFree == undefined) {
     e.isFree = 0;
   }
   return (
     (t += "<div id='scroll_detail_" + e.id + "' class='class_info_detail'>"),
-    1 == gPageIndex &&
+    PAGE_MENUS[gPageIndex] == "課程相關管理" &&
       ((t += GenerateClassInfo(e.id, "類別:", e.courseType, "type")),
       (t += GenerateClassInfo(e.id, "收費:", e.isFree, "free")),
       (t += GenerateClassInfo(e.id, "名字:", e.name, "name")),
@@ -392,7 +390,7 @@ function GenerateClassButtonLine(e) {
   t += "<div class='class_info_detail_button_line'>";
   var a = GetClassFromID(e);
   return (
-    0 == e.length || 1 != gPageIndex
+    0 == e.length || PAGE_MENUS[gPageIndex] != "課程相關管理"
       ? (t +=
           "order" != e && "order_save" != e && "user" != e && "real_class_check" != e
             ? "<div class='class_info_detail_button_line_button' style='visibility:hidden;'>"
@@ -402,9 +400,9 @@ function GenerateClassButtonLine(e) {
       : (t += "<div class='class_info_detail_button_line_button' onclick='OpenClass(\"" + e + "\")'>"),
     1 == a.isActive ? (t += GenerateNormalString("關閉課程", "font-size:40px", "")) : (t += GenerateNormalString("開啟課程", "font-size:40px", "")),
     (t += "</div>"),
-    0 == gPageIndex
+    PAGE_MENUS[gPageIndex] == "線下課程管理"
       ? (t += "<div class='class_info_detail_button_line_button' onclick='SaveUser(\"" + e + "\");'>")
-      : 1 == gPageIndex && (t += "<div class='class_info_detail_button_line_button' onclick='SaveClass(\"" + e + "\")'>"),
+      : PAGE_MENUS[gPageIndex] == "課程相關管理" && (t += "<div class='class_info_detail_button_line_button' onclick='SaveClass(\"" + e + "\")'>"),
     "order" == e
       ? ((t += "<div class='class_info_detail_button_line_button' onclick='GetAllOrder()' style='width:50%;margin-left:25%;'>"),
         (t += GenerateNormalString("顯示所有尚未確認的訂單", "font-size:30px", "")))
@@ -721,7 +719,7 @@ function GenerateAttach(e, t, a) {
 }
 function UpdateRealClass() {
   var e = "";
-  if (0 == gPageIndex) {
+  if (PAGE_MENUS[gPageIndex] == "線下課程管理") {
     for (var t = 0; t < gRealClasses.length; t++) e += GenerateClass(gRealClasses[t]);
     e += GenerateBorder();
   } else {
@@ -1101,24 +1099,31 @@ function ChangeContent(e) {
     window.location.assign("../index.htm");
   }
 }
-function ShowScrollDetail(e) {
-  var t = $("#scroll_parent_" + e),
-    a = $("#scroll_detail_" + e);
-  a.is(":hidden")
-    ? (t.removeClass("class_info").addClass("class_info_exapnd"),
-      a.show(),
-      0 == gPageIndex
-        ? GetClassMember(e)
-        : 1 == gPageIndex
-        ? 0 != e.length
-          ? GetClassContent(e)
-          : ((gAllClasses[0].attachFiles = new Array()),
-            (gAllClasses[0].chapters = new Array()),
-            (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses))),
-            UpdateAllClassContent(e),
-            ChangeAddClass())
-        : 4 == gPageIndex && GetUserInfo(e))
-    : (t.removeClass("class_info_exapnd").addClass("class_info"), a.hide());
+function ShowScrollDetail(id) {
+  var parent = $("#scroll_parent_" + id);
+  var detail = $("#scroll_detail_" + id);
+  if (detail.is(":hidden")) {
+    parent.removeClass("class_info").addClass("class_info_exapnd");
+    detail.show();
+    if (PAGE_MENUS[gPageIndex] == "線下課程管理") {
+      GetClassMember(id);
+    } else if (PAGE_MENUS[gPageIndex] == "會員管理") {
+      GetUserInfo(id);
+    } else if (PAGE_MENUS[gPageIndex] == "課程相關管理") {
+      if (id.length != 0) {
+        GetClassContent(id);
+      } else {
+        gAllClasses[0].attachFiles = new Array();
+        gAllClasses[0].chapters = new Array();
+        gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses));
+        UpdateAllClassContent(id);
+        ChangeAddClass();
+      }
+    }
+  } else {
+    parent.removeClass("class_info_exapnd").addClass("class_info");
+    detail.hide();
+  }
 }
 function ReadURL(e, a, i) {
   if (e.files && e.files[0]) {
@@ -1501,7 +1506,6 @@ function GenerateActivityBlock(index, text) {
   return res;
 }
 function GenerateActivityDetail(index) {
-  console.log(gActivityList[index].content);
   var res = "";
   res += "<div class='activity_detail' id='activity_detail_" + index + "'>";
   res += "<div class='activity_detail_line'>";
@@ -1553,7 +1557,7 @@ function GenerateActivityDetail(index) {
   res += "</div>";
   res += "<div class='activity_detail_line'>";
   res += "<div class='activity_detail_line_label'>";
-  res += GenerateNormalString("啟動:", "font-size: 20px;");
+  res += GenerateNormalString("啟用狀態:", "font-size: 20px;");
   res += "</div>";
   res += "<div class='activity_detail_line_input'>";
   res += gActivityList[index].content.isActive == 1 ? GenerateNormalString("啟用中", "font-size: 20px;text-align:left") : GenerateNormalString("已關閉", "font-size: 20px;text-align:left");
