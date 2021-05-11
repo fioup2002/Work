@@ -157,33 +157,6 @@ function GetAllClass() {
       } catch (e) {
         t = s.responseText;
       }
-      /*test*/
-      // t = new Object();
-      // t.status = "success";
-      // gToken = "Test";
-      // t.courseList = new Array();
-      // for(var i = 1 ; i <= 3; i++)
-      // {
-      // var class_obj =
-      // {
-      // "id": "c000"+i,
-      // "courseType": i,
-      // "name": "攝影第"+i+"課",
-      // "description": "這是第一堂課影課程",
-      // "isFree": 1,
-      // "specs": [
-      // {
-      // "duration": 86400,
-      // "price": 2000
-      // }
-      // ],
-      // "pics": null,
-      // "isValid": 1,
-      // "attachFiles":[]
-      // }
-      // t.courseList.push(class_obj);
-      // }
-      /*test*/
       CheckStatus(t, e),
         (0 != (gAllClasses = t.courseList).length && 0 == gAllClasses[0].id.length) || gAllClasses.splice(0, 0, DefaultClass()),
         (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses)));

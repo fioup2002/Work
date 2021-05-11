@@ -1084,13 +1084,11 @@ function ChangeContent(e) {
     $("#content_body").empty().append(GenerateOrder());
     gPageIndex = e;
     $("#header_id").html(PAGE_MENUS[e]);
-    $("#content_body").empty();
   } else if (PAGE_MENUS[e] == "會員管理") {
     GetAllMember();
     $("#content_body").empty().append(GenerateUser());
     gPageIndex = e;
     $("#header_id").html(PAGE_MENUS[e]);
-    $("#content_body").empty();
   } else if (PAGE_MENUS[e] == "Vimeo影片空間") {
     window.open("https://vimeo.com/");
   } else if (PAGE_MENUS[e] == "Mega檔案空間") {
