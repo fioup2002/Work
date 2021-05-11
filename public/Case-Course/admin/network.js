@@ -15,7 +15,7 @@ var gActivityList = new Array();
 var gOrigianlActivityList = new Array();
 function GetAllActivity() {
   $.ajax({
-    url: "/event/list",
+    url: "/api/event/index.php/event/list",
     dataType: "json",
     type: "get",
     data: "",
@@ -53,7 +53,7 @@ function GetActivityDetail(index) {
         UpdateActivityDetail(index);
       } else {
         $.ajax({
-          url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content/",
+          url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/content",
           dataType: "json",
           type: "get",
           data: "",
@@ -85,29 +85,29 @@ function GetActivityDetail(index) {
   }
 }
 function SendCreateEvent(index) {
-  console.log(gActivityList[index].content);
   $.ajax({
     url: "/api/event/index.php/event/create",
     dataType: "json",
     type: "post",
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
-      console.log("resp: ");
-      console.log(res);
+      if (res.status != "success") {
+        alert("活動名稱或活動描述包含非法字元，請重新檢查");
+      }
       GetAllActivity();
     },
   });
 }
 function SendUpdateEvent(index) {
-  console.log(gActivityList[index].content);
   $.ajax({
     url: "/api/event/index.php/event/" + gActivityList[index].event_id + "/update",
     dataType: "json",
     type: "post",
     data: JSON.stringify(gActivityList[index].content),
     success: function (res) {
-      console.log("resp: " + res);
-      console.log(res);
+      if (res.status != "success") {
+        alert("活動名稱或活動描述包含非法字元，請重新檢查");
+      }
       GetAllActivity();
     },
   });
@@ -123,7 +123,6 @@ function CheckActicityData(index) {
 }
 function GetAllRealClass() {
   var a = gServerAPI + "/course/index.php/course/list";
-  console.log(a);
   $.ajax({
     type: "GET",
     url: a,
@@ -187,8 +186,10 @@ function GetAllClass() {
       /*test*/
       CheckStatus(t, e),
         (0 != (gAllClasses = t.courseList).length && 0 == gAllClasses[0].id.length) || gAllClasses.splice(0, 0, DefaultClass()),
-        (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses))),
-        1 == gPageIndex && UpdateAllClass();
+        (gAllModifyClasses = $.parseJSON(JSON.stringify(gAllClasses)));
+        if(PAGE_MENUS[gPageIndex] == "課程相關管理"){
+          UpdateAllClass();
+        }
     },
     dataType: "json",
     data: "",
@@ -235,7 +236,10 @@ function GetAllMember() {
       } catch (e) {
         t = s.responseText;
       }
-      CheckStatus(t, e), (gAllUser = t.userList), (gOrigianlAllUser = t.userList), 4 == gPageIndex && UpdateMemberList();
+      CheckStatus(t, e), (gAllUser = t.userList), (gOrigianlAllUser = t.userList); 
+      if(PAGE_MENUS[gPageIndex] == "會員管理"){
+        UpdateMemberList();
+      } 
     },
     dataType: "json",
     data: "",

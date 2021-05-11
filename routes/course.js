@@ -35,7 +35,7 @@ router.get("/api/event/index.php/event/:id/content/", function (req, res, next) 
   obj.status = "success";
   var eventData = new Object();
   eventData.name = "event_name";
-  eventData.description = "event_description";
+  eventData.description = "123456\n4897\n789\n123";
   eventData.isActive = "1";
   eventData.startTime = "1617595691";
   eventData.endTime = "1618027691";
@@ -43,7 +43,7 @@ router.get("/api/event/index.php/event/:id/content/", function (req, res, next) 
   data.link = "http://link";
   data.mainImg = "./123.jpg";
   data.imgs = new Array();
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < 8; i++) {
     data.imgs.push("./" + i + ".jpg");
   }
   eventData.data = data;
@@ -51,7 +51,7 @@ router.get("/api/event/index.php/event/:id/content/", function (req, res, next) 
   res.send(obj);
 });
 
-router.get("/event/list", function (req, res, next) {
+router.get("/api/event/index.php/event/list", function (req, res, next) {
   var obj = new Object();
   obj.status = "success";
   obj.eventList = new Array();
@@ -59,6 +59,8 @@ router.get("/event/list", function (req, res, next) {
     var event = new Object();
     event["event_id"] = "event_ID_" + i;
     event["name"] = "event_name_" + i;
+    event["is_active"] = 1;
+    event["main_img"] = "img_" + i;
     obj.eventList.push(event);
   }
   res.send(obj);
