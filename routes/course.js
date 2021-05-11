@@ -10,6 +10,12 @@ router.get(/debug/, function (req, res, next) {
   // request(newurl).pipe(res);
 });
 
+router.get("/api/course/index.php/course/user/list",function(req, res, next){
+  var obj = new Object();
+  obj.status = "success";
+  res.send(obj);
+});
+
 router.get("/api/user/index.php/user/get/list", function (req, res, next) {
   var obj = new Object();
   obj.status = "success";

@@ -1,5 +1,4 @@
 var data = {
-  isDebug: true,
   token: "",
   browserAlert: "本站建議使用Google Chrome瀏覽器以獲得最佳使用體驗",
   header: [
@@ -36,8 +35,15 @@ var data = {
   ],
   index: {
     title: "朱智青老師影像",
+    banner: "平面中的風景與情懷<br><span>朱智青帶你攝影、編修與旅拍</span>",
   },
 };
+function SetHeaderTextDefaultVisibility() {
+  for (var i = 0; i < global.header.length; i++) {
+    global.header[i].isNeedShow = false;
+  }
+  SetHeaderTextVisibility("登入", true);
+}
 function SetHeaderTextVisibility(text, isShow) {
   for (var i = 0; i < global.header.length; i++) {
     var obj = global.header[i];

@@ -13,6 +13,11 @@
         <div class='header_title' :style='GetHeaderTextWidth()' v-html="GenerateText(index.title)"></div>
         <a v-if='obj.isNeedShow' class='header_item' v-for="obj in header" v-html="GenerateText(obj.text)" :href="obj.href"></a>
       </div>
+      <div class="expand"></div>
+      <div class="banner">
+        <div class="banner_img"></div>
+        <div class="banner_text" v-html="GenerateText(index.banner)"></div>
+      </div>
     </div>
     <script>
       var gPage = "index";

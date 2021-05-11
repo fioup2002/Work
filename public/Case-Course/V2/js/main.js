@@ -13,9 +13,9 @@ $(function () {
       global.CheckBrowser();
       global.CheckToken();
       if (gPage == "index") {
-        SetHeaderTextVisibility("登入",true);
-        global.GetAllClass();
-        global.GetHeaderTextWidth();
+        SetHeaderTextDefaultVisibility();
+        SendCommand("get_all_course");
+        SendCommand("get_all_event");
       }
     },
     methods: {
@@ -29,9 +29,6 @@ $(function () {
           global.token = localStorage.token;
           SendCommand("check_token_valid");
         }
-      },
-      GetAllClass() {
-        SendCommand("get_all_course");
       },
       GenerateText(text) {
         var res = "";

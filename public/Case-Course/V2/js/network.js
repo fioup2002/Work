@@ -9,14 +9,12 @@ function SendCommand(type) {
   // order_api = "/order",
   // indexphp = "/index.php",
 
-  var host = "/";
-  if (global.isDebug) {
-    host += "debug/";
-  }
   if (type == "check_token_valid") {
-    url = host + "api/user/index.php/user/login/verify";
+    url = "/api/user/index.php/user/login/verify";
   } else if (type == "get_all_course") {
-    url = host + "api/course/index.php/course/user/list";
+    url = "/api/course/index.php/course/user/list";
+  } else if(type == "get_all_event"){
+    url = "/api/event/index.php/event/list";
   }
   $.ajax({
     type: httpType,
