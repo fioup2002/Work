@@ -96,6 +96,10 @@ function SendCreateEvent(index) {
       }
       GetAllActivity();
     },
+    headers: {
+      "Content-Type": "application/json",
+      "access-token": gToken,
+    },
   });
 }
 function SendUpdateEvent(index) {
@@ -109,6 +113,10 @@ function SendUpdateEvent(index) {
         alert("活動名稱或活動描述包含非法字元，請重新檢查");
       }
       GetAllActivity();
+    },
+    headers: {
+      "Content-Type": "application/json",
+      "access-token": gToken,
     },
   });
 }
