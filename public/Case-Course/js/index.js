@@ -184,29 +184,41 @@ function GenerateNormalQuestion() {
   for (var t = 0; t < normal_questions.length; t++) e += GenerateNormalQuestionBlock(t);
   return (e += "</div>");
 }
-function GenerateNormalQuestionBlock(e) {
-  var t = "";
-  return (t += "<div class='main_normal_question_block'>"), (t += "<div class='main_normal_question_block_title'>"), (t += GenerateTitleString(normal_questions[e].title, "font-size: 20px;font-weight:bold;letter-spacing:5;")), (t += "</div>"), (t += "<div class='main_normal_question_block_plus' onclick='ShowNormalQuestionContent(\"" + e + "\");'>"), (t += GenerateNormalString("+", "text-align:center;" + button_ok_color)), (t += "</div>"), (t += "</div>"), "如何知道我的環境可以觀看站上的課程影片?" == normal_questions[e].title ? (t += GenerateNoramalQuestionBlockVideoContent(e)) : (t += GenerateNoramalQuestionBlockContent(e)), t;
+function GenerateNormalQuestionBlock(index) {
+  var res = "";
+  res += "<div class='main_normal_question_block'>";
+  res += "<div class='main_normal_question_block_title'>";
+  res += GenerateTitleString(normal_questions[index].title, "font-size: 20px;font-weight:bold;letter-spacing:5;");
+  res += "</div>";
+  res += "<div class='main_normal_question_block_plus' onclick='ShowNormalQuestionContent(\"" + index + "\");'>";
+  res += GenerateNormalString("+", "text-align:center;" + button_ok_color);
+  res += "</div>";
+  res += "</div>";
+  if (normal_questions[index].href != undefined) {
+    res += GenerateNoramalQuestionBlockVideoContent(index, normal_questions[index].href);
+  } else {
+    res += GenerateNoramalQuestionBlockContent(index);
+  }
+  return res;
 }
 function GenerateNoramalQuestionBlockContent(e) {
   var t = "";
   return (t += "<div id='normal_question_content_" + e + "' class='main_normal_question_block_content' style='height:" + 30 * normal_questions[e].answer.split("<br>").length + "px'>"), (t += "<div id='normal_question_content_" + e + "' class='main_normal_question_block_content_block'>"), (t += GenerateNormalString(normal_questions[e].answer, "font-size: 16px;font-weight:bold;letter-spacing:5;")), (t += "</div>"), (t += "</div>");
 }
-function GenerateNoramalQuestionBlockVideoContent(e) {
-  var t = "";
-  return (
-    (t += "<div id='normal_question_content_" + e + "' class='main_normal_question_block_content' style='height:400px'>"),
-    (t += "<div id='normal_question_content_" + e + "' class='main_normal_question_block_content_block'>"),
-    (t += "<div class='main_normal_question_block_content_block_message'>"),
-    (t += GenerateNormalString(normal_questions[e].answer, "font-size: 16px;font-weight:bold;letter-spacing:5;")),
-    (t += "</div>"),
-    (t += "<div class='main_normal_question_block_content_block_video'>"),
-    (t += "<iframe src='" + gTestVideoUrl + "' class='fill_parent' allowfullscreen='allowfullscreen' mozallowfullscreen='mozallowfullscreen' msallowfullscreen='msallowfullscreen' oallowfullscreen='oallowfullscreen' webkitallowfullscreen='webkitallowfullscreen'>"),
-    (t += "</iframe >"),
-    (t += "</div>"),
-    (t += "</div>"),
-    (t += "</div>")
-  );
+function GenerateNoramalQuestionBlockVideoContent(index, url) {
+  var res = "";
+  res += "<div id='normal_question_content_" + index + "' class='main_normal_question_block_content' style='height:400px'>";
+  res += "<div id='normal_question_content_" + index + "' class='main_normal_question_block_content_block'>";
+  res += "<div class='main_normal_question_block_content_block_message'>";
+  res += GenerateNormalString(normal_questions[index].answer, "font-size: 16px;font-weight:bold;letter-spacing:5;");
+  res += "</div>";
+  res += "<div class='main_normal_question_block_content_block_video'>";
+  res += "<iframe src='" + url + "' class='fill_parent' allowfullscreen='allowfullscreen' mozallowfullscreen='mozallowfullscreen' msallowfullscreen='msallowfullscreen' oallowfullscreen='oallowfullscreen' webkitallowfullscreen='webkitallowfullscreen' frameborder='0' >";
+  res += "</iframe >";
+  res += "</div>";
+  res += "</div>";
+  res += "</div>";
+  return res;
 }
 function GenerateContact() {
   var e = "";
