@@ -1532,7 +1532,7 @@ function GenerateActivityDetail(index) {
   res += GenerateNormalString("開始時間:", "font-size: 20px;");
   res += "</div>";
   res +=
-    "<input onkeydown='return false' type='datetime-local' id='activity_detail_startTime_" +
+    "<input onkeydown='return false' type='datetime-local' step='60' id='activity_detail_startTime_" +
     index +
     "' class='activity_detail_line_input' value='" +
     ChangeTimestampToDate(gActivityList[index].content.startTime) +
@@ -1545,7 +1545,7 @@ function GenerateActivityDetail(index) {
   res += GenerateNormalString("結束時間:", "font-size: 20px;");
   res += "</div>";
   res +=
-    "<input onkeydown='return false' type='datetime-local' id='activity_detail_endTime_" +
+    "<input onkeydown='return false' type='datetime-local' step='60'  id='activity_detail_endTime_" +
     index +
     "' class='activity_detail_line_input'  value='" +
     ChangeTimestampToDate(gActivityList[index].content.endTime) +
@@ -1705,7 +1705,7 @@ function DeleteActivitySubImage(index, subIndex) {
   }
 }
 function ChangeTimestampToDate(timestamp) {
-  return new Date(timestamp * 1000).toISOString().split(".")[0];
+  return new Date((timestamp - timestamp % 60)  * 1000).toISOString().split(".")[0];
 }
 function CreateEvent(index) {
   if (CheckEvent(index)) {
@@ -1726,10 +1726,14 @@ function ChangeDetailValue(id, index) {
     gActivityList[index].content.description = $("#" + id + index).val();
   }
   if (id == "activity_detail_startTime_") {
-    gActivityList[index].content.startTime = new Date($("#" + id + index).val()).getTime() / 1000;
+    var date = new Date();
+    var offset = date.getTimezoneOffset();
+    gActivityList[index].content.startTime = new Date($("#" + id + index).val()).getTime() / 1000 - offset * 60;
   }
   if (id == "activity_detail_endTime_") {
-    gActivityList[index].content.endTime = new Date($("#" + id + index).val()).getTime() / 1000;
+    var date = new Date();
+    var offset = date.getTimezoneOffset();
+    gActivityList[index].content.endTime = (new Date($("#" + id + index).val()).getTime() / 1000) - offset * 60;
   }
   if (id == "activity_detail_link_") {
     gActivityList[index].content.data.link = $("#" + id + index).val();
