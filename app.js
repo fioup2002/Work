@@ -3,6 +3,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // var sdk = require('./routes/sdk/command');
 var sdk = require("./routes/course.js");
@@ -21,7 +22,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', sdk);
 
+const options = {
+  target: 'https://teacher-ju.net', // target host
+  changeOrigin: true, // needed for virtual hosted sites
+  ws: true, // proxy websockets
+  pathRewrite: {
+    '^/test': '/', // rewrite path
+  },
+};
 
+// create the proxy (without context)
+const exampleProxy = createProxyMiddleware(options);
+
+// mount `exampleProxy` in web server
+app.use('/test', exampleProxy);
 
 // app.use(function(req, res, next) {
 // 	res.send("1");

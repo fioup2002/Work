@@ -10,13 +10,41 @@
   <body>
     <div id="main">
       <div class="header">
-        <div class='header_title' :style='GetHeaderTextWidth()' v-html="GenerateText(index.title)"></div>
-        <a v-if='obj.isNeedShow' class='header_item' v-for="obj in header" v-html="GenerateText(obj.text)" :href="obj.href"></a>
+        <div class="title" v-html="index.title"></div>
+        <div class="list">
+          <div v-if="header[0].isNeedShow" class="item" v-html="header[0].text"></div>
+          <div v-else-if="header[1].isNeedShow" class="item" v-html="header[1].text"></div>
+          <div v-else-if="header[2].isNeedShow" class="item" v-html="header[2].text"></div>
+          <div v-else-if="header[3].isNeedShow" class="item" v-html="header[3].text" @click="alert.type='login'"></div>
+          <div v-else-if="header[4].isNeedShow" class="item" v-html="header[4].text"></div>
+        </div>
       </div>
-      <div class="expand"></div>
-      <div class="banner">
-        <div class="banner_img"></div>
-        <div class="banner_text" v-html="GenerateText(index.banner)"></div>
+      <div v-if="alert.type.length != 0" class="alert">
+        <div class="bg">
+          <div class="close" @click="alert.type=''">X</div>
+          <form v-if="alert.type =='login'" class="login">
+            <div class="list">
+              <div class="item" v-for="obj in alert.login.list">
+                <div class="label" v-html="obj.label"></div>
+                <input class="input" v-model="obj.value" :type="obj.type" :autocomplete="obj.type=='password'?'on':''" />
+              </div>
+            </div>
+            <div class="menu">
+              <div class="button">
+                <div class="item" v-html="alert.login.button[0]"></div>
+                <div class="item" v-html="alert.login.button[1]"></div>
+              </div>
+              <div class="remember">
+                <input class="checkbox" type="checkbox" v-model="alert.login.remember.isSelect"/>
+                <div class="text" v-html="alert.login.remember.text"></div>
+              </div>
+            </div>
+            <div class="forget" v-html="alert.login.forget"></div>
+          </form>
+          <form v-else-if="alert.type =='register'" class="register">
+
+          </form>
+        </div>
       </div>
     </div>
     <script>

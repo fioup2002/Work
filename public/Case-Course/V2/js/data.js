@@ -4,32 +4,26 @@ var data = {
   header: [
     {
       text: "管理者介面",
-      href: "javascript:void(0);",
       isNeedShow: false,
     },
     {
       text: "購物車",
-      href: "javascript:void(0);",
       isNeedShow: false,
     },
     {
       text: "會員中心",
-      href: "javascript:void(0);",
       isNeedShow: false,
     },
     {
       text: "登入",
-      href: "javascript:void(0);",
-      isNeedShow: false,
+      isNeedShow: true,
     },
     {
       text: "登出",
-      href: "javascript:void(0);",
       isNeedShow: false,
     },
     {
       text: "課程內容",
-      href: "javascript:void(0);",
       isNeedShow: false,
     },
   ],
@@ -37,18 +31,41 @@ var data = {
     title: "朱智青老師影像",
     banner: "平面中的風景與情懷<br><span>朱智青帶你攝影、編修與旅拍</span>",
   },
+  alert: {
+    type: "register",
+    login: {
+      list: [
+        { label: "會員名稱", value: "", type: "text" },
+        { label: "密碼", value: "", type: "password" },
+      ],
+      button: ["註冊", "登入"],
+      remember: {
+        text: "記住我",
+        isSelect: false,
+      },
+      forget: "忘記您的密碼？",
+    },
+    register: {
+      list: [
+        { label: "會員名稱(限定英文大小寫加數字)", value: "", type: "text" },
+        { label: "密碼", value: "", type: "password" },
+        { label: "確認密碼", value: "", type: "password" },
+        { label: "信箱", value: "", type: "text" },
+        {
+          hint: "請先驗證信箱",
+          send: "傳送驗證碼",
+          confirm: "確認",
+          code: "",
+          type: "verify"
+        },
+        { label: "名字", value: "", type: "text" },
+        { label: "手機", value: "", type: "text" },
+      ],
+      agree:{
+        isSelect: false,
+        text: "我同意",
+        href: "會員同意書"
+      }
+    },
+  },
 };
-function SetHeaderTextDefaultVisibility() {
-  for (var i = 0; i < global.header.length; i++) {
-    global.header[i].isNeedShow = false;
-  }
-  SetHeaderTextVisibility("登入", true);
-}
-function SetHeaderTextVisibility(text, isShow) {
-  for (var i = 0; i < global.header.length; i++) {
-    var obj = global.header[i];
-    if (text == obj.text) {
-      obj.isNeedShow = isShow;
-    }
-  }
-}

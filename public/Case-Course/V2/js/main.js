@@ -5,49 +5,47 @@ $(function () {
     data: data,
     created() {
       global = this;
-      if (gPage == "index") {
-        $("head").append("<title>" + global.index.title + "</title>");
-      }
+      this.SetRem();
+      window.onresize = () => {
+        return (() => {
+          this.SetRem();
+        })();
+      };
+      this.CheckBrowser();
+      this.CheckToken();
     },
     mounted() {
-      global.CheckBrowser();
-      global.CheckToken();
       if (gPage == "index") {
-        SetHeaderTextDefaultVisibility();
-        SendCommand("get_all_course");
-        SendCommand("get_all_event");
+        // SendCommand("get_all_course");
+        // SendCommand("get_all_event");
       }
     },
     methods: {
+      SetRem() {
+        var width = document.body.clientWidth;
+        if (width > 750 && width < 1920) {
+          document.documentElement.style.fontSize = width / 19.2 + "px";
+        } else {
+          document.documentElement.style.fontSize = "100px";
+        }
+      },
       CheckBrowser() {
         if (navigator.userAgent.search("Safari") <= -1) {
           alert(global.browserAlert);
         }
       },
+      SetHeader(text, isNeedShow) {
+        this.header.forEach((obj) => {
+          if (obj.text == text) {
+            obj.isNeedShow = isNeedShow;
+          }
+        });
+      },
       CheckToken() {
         if (localStorage.length != 0 && localStorage.token.length != 0) {
-          global.token = localStorage.token;
+          this.token = localStorage.token;
           SendCommand("check_token_valid");
         }
-      },
-      GenerateText(text) {
-        var res = "";
-        res += "<table class='text_block'>";
-        res += "<td class='text_block_td'>";
-        res += text;
-        res += "</td>";
-        res += "</table>";
-        return res;
-      },
-      GetHeaderTextWidth() {
-        var count = 0;
-        for(var i = 0; i < global.header.length;i++){
-          var obj = global.header[i];
-          if(obj.isNeedShow){
-            count++;
-          }
-        }
-        return "width: calc(100% - (125px + 10px) * "+count+")";
       },
     },
   });
