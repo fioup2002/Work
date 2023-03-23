@@ -10,7 +10,7 @@ router.get(/debug/, function (req, res, next) {
   // request(newurl).pipe(res);
 });
 
-router.get("/api/course/index.php/course/user/list",function(req, res, next){
+router.get("/api/course/index.php/course/user/list", function (req, res, next) {
   var obj = new Object();
   obj.status = "success";
   res.send(obj);
@@ -136,6 +136,25 @@ router.get("/api/event/index.php/event/list", function (req, res, next) {
     obj.eventList.push(event);
   }
   res.send(obj);
+});
+
+router.get("/chatGPT/",(req, res, next) => {
+  const key = "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";
+  const { Configuration, OpenAIApi } = require("openai");
+  const configuration = new Configuration({
+    apiKey: key,
+  });
+  const openai = new OpenAIApi(configuration);
+  async function runCompletion() {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: req.query.text,
+      max_tokens: 1200,
+      temperature: 0,
+    });
+    res.send(completion.data.choices[0].text);
+  }
+  runCompletion();
 });
 
 module.exports = router;
